@@ -1,0 +1,2 @@
+NTLM restricted by GPO [ReedMac Desktop 1.0] with value [LmCompatibilityLevel Send NTLMv2 response only]
+NTLM restricted by GPO [ReedMac Desktop 1.0] with value [LmCompatibilityLevel Send NTLMv2 response only]

@@ -1,0 +1,8 @@
+"VMName","VCenter","Status","BeforeGuid","BeforeName","AfterGuid","AfterName","Changed","Note"
+"USPRAP016",,"OK",,,,,"False","Target=High (8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c); GuestReportedVM="
+"USPRWS009",,"OK",,,,,"False","Target=High (8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c); GuestReportedVM="
+"USPRWS010",,"Skipped (VMware Tools not OK)","","","","","False",""
+"USPRAP015",,"OK",,,,,"False","Target=High (8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c); GuestReportedVM="
+"IEPRAP020",,"OK",,,,,"False","Target=High (8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c); GuestReportedVM="
+"UKPRAP220",,"OK",,,,,"False","Target=High (8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c); GuestReportedVM="
+"UKPRAP196",,"OK",,,,,"False","Target=High (8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c); GuestReportedVM="

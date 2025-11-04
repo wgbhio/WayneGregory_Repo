@@ -1,0 +1,5 @@
+
+ObjectType ObjectName                                                               IdentityReference AccessControlType ActiveDirectoryRights
+---------- ----------                                                               ----------------- ----------------- ---------------------
+User       CN=Finance Planning,OU=Shared Mailboxes,OU=Shared Groups,DC=bfl,DC=local Everyone                      Allow            GenericAll
+

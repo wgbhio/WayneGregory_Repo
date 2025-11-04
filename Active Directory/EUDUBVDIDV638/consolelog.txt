@@ -1,0 +1,32 @@
+ _____ ____     _____       _ _ _
+|  _  |    \   |  _  |_ _ _| |_| |_
+|     |  |  |  |     | | | . | |  _|
+|__|__|____/   |__|__|___|___|_|_|
+v6.0                  by phillips321
+
+[*] Script start time 04/23/2025 14:14:39
+[!] ServerManager module not installed, exiting...
+ _____ ____     _____       _ _ _
+|  _  |    \   |  _  |_ _ _| |_| |_
+|     |  |  |  |     | | | . | |  _|
+|__|__|____/   |__|__|___|___|_|_|
+v6.0                  by phillips321
+
+[*] Script start time 04/23/2025 14:17:52
+[!] ServerManager module not installed, exiting...
+ _____ ____     _____       _ _ _
+|  _  |    \   |  _  |_ _ _| |_| |_
+|     |  |  |  |     | | | . | |  _|
+|__|__|____/   |__|__|___|___|_|_|
+v6.0                  by phillips321
+
+[*] Script start time 04/24/2025 12:04:26
+[!] ServerManager module not installed, exiting...
+ _____ ____     _____       _ _ _
+|  _  |    \   |  _  |_ _ _| |_| |_
+|     |  |  |  |     | | | . | |  _|
+|__|__|____/   |__|__|___|___|_|_|
+v6.0                  by phillips321
+
+[*] Script start time 04/24/2025 12:06:37
+[!] ServerManager module not installed, exiting...

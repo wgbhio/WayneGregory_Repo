@@ -1,0 +1,33 @@
+user y_bistc Christian Bistriceanu_Admin
+user svc_exchrepplus Exchange Reporter Plus Service Account
+user svc_adaudit AD Audit Service Account
+user borem2 Mark Borenstein_Admin
+user rosij2 Jay Rosienski_Admin
+user Chris.Butler Chris Butler_Admin
+user dalesteggles Dale Steggles_Admin
+user .folen Nathan Foley_Admin
+user btimebfl3 btimebfl3
+user hendb2 Ben Henderson_Admin
+user y_bochr Chris Bourne_Admin
+user y_copeb Bob Cope_Admin
+user longbot_y John Longbottom_Admin
+user .black Kim Blackburn_Admin
+user .bredg Gunnar Bredow_admin
+user SVC_ISE_FMC_PRD SVC_ISE_FMC_PRD
+user x1_tr Tim Reading_Admin
+user x1_jn Jason Needs_Admin
+user .melew Wilmary Rodriguez_Admin
+user x1_ml Mark Lee_Admin
+user x1_gilln Navjot Gill_admin
+user a1_DS6 Daniel Suttle_admin
+user A1_JBR James Beer_Admin
+user SVC_PURVIEW_ADMIN SVC_PURVIEW_ADMIN
+user a1_UI Umair Ijaz_admin
+user a1_PM1 Paul Morrison_admin
+user a1_AW Andrew Webster_Admin
+user a1_AE Adrian Evangelista_Admin
+user a1_Soa Simon Oakes_Admin
+user a1_PA Paul Lampkin_admin
+user GrWay Wayne Gregory
+user a1_JR James Rankin_admin
+user a1_WG7 Wayne Gregory_Admin

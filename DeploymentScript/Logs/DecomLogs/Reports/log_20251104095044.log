@@ -1,0 +1,29 @@
+2025-11-04 09:50:50 [TEST] [INFO] Connected to vCenter servers: ukprim098.bfl.local, usprim004.bfl.local, ieprim018.bfl.local
+2025-11-04 09:50:50 [TEST] [INFO] Script started in TEST MODE - no changes will be made
+2025-11-04 09:50:50 [TEST] [INFO] Getting VM inventory data
+2025-11-04 09:51:18 [TEST] [INFO] Exported VM discovery list to C:\Users\GrWay\OneDrive - Beazley Group\Documents\Scripts\DeploymentScript\Logs\DecomLogs\Reports\DECOMList_04112025_0951.csv
+2025-11-04 09:51:18 [TEST] [INFO] Starting decommission process for 6 servers
+2025-11-04 09:51:18 [TEST] [INFO] Processing server: UKPRAP304
+2025-11-04 09:51:18 [TEST] [ERROR] AD step error for UKPRAP304 : A Using variable cannot be retrieved. A Using variable can be used only with Invoke-Command, Start-Job, or InlineScript in the script workflow. When it is used with Invoke-Command, the Using variable is valid only if the script block is invoked on a remote computer.
+2025-11-04 09:51:19 [TEST] [INFO] Completed processing: UKPRAP304
+2025-11-04 09:51:19 [TEST] [INFO] Processing server: UKPRAP215
+2025-11-04 09:51:22 [TEST] [INFO] VM UKPRAP215 last powered off: 10/24/2025 15:44:22 (10.8 days ago)
+2025-11-04 09:51:22 [TEST] [ERROR] AD step error for UKPRAP215 : A Using variable cannot be retrieved. A Using variable can be used only with Invoke-Command, Start-Job, or InlineScript in the script workflow. When it is used with Invoke-Command, the Using variable is valid only if the script block is invoked on a remote computer.
+2025-11-04 09:51:22 [TEST] [INFO] Completed processing: UKPRAP215
+2025-11-04 09:51:22 [TEST] [INFO] Processing server: UKDVAP128
+2025-11-04 09:51:22 [TEST] [ERROR] AD step error for UKDVAP128 : A Using variable cannot be retrieved. A Using variable can be used only with Invoke-Command, Start-Job, or InlineScript in the script workflow. When it is used with Invoke-Command, the Using variable is valid only if the script block is invoked on a remote computer.
+2025-11-04 09:51:22 [TEST] [INFO] Completed processing: UKDVAP128
+2025-11-04 09:51:22 [TEST] [INFO] Processing server: UKPRDB095
+2025-11-04 09:51:26 [TEST] [INFO] VM UKPRDB095 last powered off: 10/24/2025 15:47:23 (10.8 days ago)
+2025-11-04 09:51:26 [TEST] [ERROR] AD step error for UKPRDB095 : A Using variable cannot be retrieved. A Using variable can be used only with Invoke-Command, Start-Job, or InlineScript in the script workflow. When it is used with Invoke-Command, the Using variable is valid only if the script block is invoked on a remote computer.
+2025-11-04 09:51:26 [TEST] [INFO] Completed processing: UKPRDB095
+2025-11-04 09:51:26 [TEST] [INFO] Processing server: UKDVAP081 - Claim Center SQL/WEB
+2025-11-04 09:51:26 [TEST] [ERROR] AD step error for UKDVAP081 - Claim Center SQL/WEB : A Using variable cannot be retrieved. A Using variable can be used only with Invoke-Command, Start-Job, or InlineScript in the script workflow. When it is used with Invoke-Command, the Using variable is valid only if the script block is invoked on a remote computer.
+2025-11-04 09:51:26 [TEST] [INFO] Completed processing: UKDVAP081 - Claim Center SQL/WEB
+2025-11-04 09:51:26 [TEST] [INFO] Processing server: UKPRAP216
+2025-11-04 09:51:30 [TEST] [INFO] VM UKPRAP216 last powered off: 10/24/2025 15:43:06 (10.8 days ago)
+2025-11-04 09:51:30 [TEST] [ERROR] AD step error for UKPRAP216 : A Using variable cannot be retrieved. A Using variable can be used only with Invoke-Command, Start-Job, or InlineScript in the script workflow. When it is used with Invoke-Command, the Using variable is valid only if the script block is invoked on a remote computer.
+2025-11-04 09:51:30 [TEST] [INFO] Completed processing: UKPRAP216
+2025-11-04 09:51:30 [TEST] [INFO] Results exported to: C:\Users\GrWay\OneDrive - Beazley Group\Documents\Scripts\DeploymentScript\Logs\DecomLogs\Reports\ServerStatus_Report_20251104_095044-ALL.csv
+2025-11-04 09:51:30 [TEST] [INFO] Decommission process completed in TEST MODE
+2025-11-04 09:51:30 [TEST] [INFO] Disconnected from vCenter servers

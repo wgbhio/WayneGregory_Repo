@@ -1,0 +1,113 @@
+SeInteractiveLogonRight BFL\IUSR_UKDRDC001
+SeInteractiveLogonRight BUILTIN\Server Operators
+SeInteractiveLogonRight BUILTIN\Print Operators
+SeInteractiveLogonRight BFL\TsInternetUser
+SeInteractiveLogonRight BFL\servexch
+SeInteractiveLogonRight BFL\Rol.Sec_Networks
+SeInteractiveLogonRight BFL\IWAM_BFL_NTSVR3
+SeInteractiveLogonRight BFL\IUSR_W2KSQL
+SeInteractiveLogonRight BFL\IUSR_TEMP-DC
+SeInteractiveLogonRight BFL\IUSR_SNGLIVDC01
+SeInteractiveLogonRight BFL\IUSR_SHLDRVM01
+SeInteractiveLogonRight BFL\IUSR_SHLDRDC02
+SeInteractiveLogonRight BFL\IUSR_PRSLIVDC01
+SeInteractiveLogonRight BFL\IUSR_PADCFL01
+SeInteractiveLogonRight BFL\IUSR_PADCA501
+SeInteractiveLogonRight BFL\IUSR_HKGLIVDC01
+SeInteractiveLogonRight BFL\IUSR_FARPRDDC01-NEW
+SeInteractiveLogonRight BFL\IUSR_FARPRDDC01
+SeInteractiveLogonRight BFL\IUSR_BFL_NTSVR3
+SeInteractiveLogonRight BFL\IUSR_BFL_NTSVR2
+SeInteractiveLogonRight BFL\IUSR_BEAZLEY-JY
+SeInteractiveLogonRight BFL\IUSR_BEAZLEYEXSERVER
+SeInteractiveLogonRight BFL\Domain Users
+SeInteractiveLogonRight BFL\$admin
+SeInteractiveLogonRight BUILTIN\Backup Operators
+SeInteractiveLogonRight BUILTIN\Account Operators
+SeInteractiveLogonRight 
+SeInteractiveLogonRight 
+SeInteractiveLogonRight 
+SeInteractiveLogonRight 
+SeInteractiveLogonRight 
+SeInteractiveLogonRight 
+SeInteractiveLogonRight 
+SeInteractiveLogonRight 
+SeInteractiveLogonRight 
+SeInteractiveLogonRight 
+SeInteractiveLogonRight 
+SeInteractiveLogonRight 
+SeInteractiveLogonRight 
+SeInteractiveLogonRight 
+SeInteractiveLogonRight 
+SeBatchLogonRight BFL\IUSR_UKDRDC001
+SeBatchLogonRight BFL\y_shiek2
+SeBatchLogonRight 
+SeBatchLogonRight BFL\IWAM_FARPRDDC01-NEW
+SeBatchLogonRight BFL\IWAM_SHLDRDC02
+SeBatchLogonRight BFL\y_coutdd
+SeBatchLogonRight BFL\IUSR_SHLDRVM01
+SeBatchLogonRight BFL\IUSR_HKGLIVDC01
+SeBatchLogonRight BFL\IWAM_HKGLIVDC01
+SeBatchLogonRight BFL\IWAM_PRSLIVDC01
+SeBatchLogonRight BFL\caroot
+SeBatchLogonRight BFL\IWAM_SNGLIVDC01
+SeBatchLogonRight BFL\admin_dch
+SeBatchLogonRight BFL\sweepupd
+SeBatchLogonRight BFL\IUSR_FARPRDDC01
+SeBatchLogonRight BFL\IWAM_PADCFL01
+SeBatchLogonRight 
+SeBatchLogonRight BFL\IUSR_PADCA501
+SeBatchLogonRight BFL\lanz
+SeBatchLogonRight BFL\IIS_WPG
+SeBatchLogonRight BFL\IUSR_TEMP-DC
+SeBatchLogonRight 
+SeBatchLogonRight 
+SeBatchLogonRight 
+SeBatchLogonRight BUILTIN\Backup Operators
+SeBatchLogonRight BFL\$admin
+SeBatchLogonRight BFL\IUSR_BEAZLEYEXSERVER
+SeBatchLogonRight BFL\IUSR_BEAZLEY-JY
+SeBatchLogonRight BFL\IUSR_W2KSQL
+SeBatchLogonRight BFL\IWAM_BEAZLEYEXSERVER
+SeBatchLogonRight BFL\IWAM_BEAZLEY-JY
+SeBatchLogonRight BFL\IWAM_BFL_NTSVR3
+SeBatchLogonRight BFL\IWAM_W2KSQL
+SeBatchLogonRight BFL\servexch
+SeBatchLogonRight 
+SeBatchLogonRight BFL\sadmin
+SeBatchLogonRight BFL\siweh
+SeBatchLogonRight BFL\IWAM_TEMP-DC
+SeBatchLogonRight BFL\SUPPORT_388945a0
+SeBatchLogonRight NT AUTHORITY\LOCAL SERVICE
+SeBatchLogonRight BFL\IUSR_PADCFL01
+SeBatchLogonRight BFL\IWAM_FARPRDDC01
+SeBatchLogonRight BFL\KVSVault
+SeBatchLogonRight BFL\IUSR_SNGLIVDC01
+SeBatchLogonRight BFL\IUSR_PRSLIVDC01
+SeBatchLogonRight BFL\IWAM_SHLDRVM01
+SeBatchLogonRight BFL\IUSR_SHLDRDC02
+SeBatchLogonRight BFL\IUSR_FARPRDDC01-NEW
+SeBatchLogonRight BFL\y_hayad
+SeBatchLogonRight BFL\y_meeto
+SeBatchLogonRight BFL\IWAM_UKDRDC001
+SeBatchLogonRight BUILTIN\IIS_IUSRS
+SeBatchLogonRight BFL\svc_bzCfgMngmt_prd
+SeRemoteInteractiveLogonRight 
+SeRemoteInteractiveLogonRight 
+SeRemoteInteractiveLogonRight BFL\Rol.Sec_Networks
+SeRemoteInteractiveLogonRight 
+SeRemoteInteractiveLogonRight 
+SeBackupPrivilege BUILTIN\Server Operators
+SeBackupPrivilege BUILTIN\Backup Operators
+SeRestorePrivilege BFL\servexch
+SeRestorePrivilege BUILTIN\Server Operators
+SeRestorePrivilege BUILTIN\Backup Operators
+SeRestorePrivilege BFL\$admin
+SeLoadDriverPrivilege BUILTIN\Print Operators
+SeShutdownPrivilege BUILTIN\Server Operators
+SeShutdownPrivilege BUILTIN\Print Operators
+SeShutdownPrivilege BUILTIN\Backup Operators
+SeShutdownPrivilege BFL\GHOST_COMPAQ14
+SeShutdownPrivilege BFL\GHOST_ITDHA004
+SeRemoteShutdownPrivilege BUILTIN\Server Operators
+SeSystemTimePrivilege BUILTIN\Server Operators

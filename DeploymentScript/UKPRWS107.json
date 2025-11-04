@@ -1,0 +1,52 @@
+{
+  "VMware": {
+    "VCSA": "ukprim098.bfl.local",
+    "Cluster": "LD9Compute",
+    "VMHost": null,
+    "VMFolder": "Production",
+    "TemplatesFolderName": "Templates",
+    "Network": "BZY|ProdVMs_AP|ProdVMs_EPG",
+    "Datastore": "",
+    "DatastoreCluster": "LD9_DatastoreCluster",
+    "ContentLibrary": {
+      "Library": "Template Library",
+      "Item": "PKR_windows_server_2022_std_Current",
+      "LocalTemplateName": null,
+      "ForceReplace": true
+    },
+    "VMName": "UKPRWS107",
+    "CustomizationSpec": "Win2022_Template_LD9",
+    "Hardware": {
+      "CPU": 4,
+      "MemoryGB": 12,
+      "DiskGB": 100,
+      "AdditionalDisks": [
+        100
+      ],
+      "Sockets": 1,
+      "CoresPerSocket": 4
+    }
+  },
+  "Options": {
+    "PowerOn": true,
+    "EnsureNICConnected": true,
+    "RemoveExtraCDROMs": true,
+    "ToolsWaitSeconds": 120,
+    "PostPowerOnDelay": 15
+  },
+  "AD": {
+    "TargetOU": "OU=Application Servers,OU=Servers & Exceptions,OU=London,OU=Accounts Computer,DC=bfl,DC=local",
+    "Server": "UKPRDC011.bfl.local",
+    "UseVCenterCreds": true,
+    "WaitForSeconds": 180,
+    "ForceSync": true
+  },
+  "PostDeploy": {
+    "EnableTags": true,
+    "EnableInstallers": false,
+    "LocalAdminGroups": [],
+    "IvantiGroup": null,
+    "PowerPlan": null
+  },
+  "ChangeRequestNumber": "CHG0089376"
+}

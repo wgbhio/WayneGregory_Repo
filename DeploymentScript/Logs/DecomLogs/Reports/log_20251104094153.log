@@ -1,0 +1,43 @@
+2025-11-04 09:42:01 [TEST] [INFO] Connected to vCenter servers: ukprim098.bfl.local, usprim004.bfl.local, ieprim018.bfl.local
+2025-11-04 09:42:01 [TEST] [INFO] Script started in TEST MODE - no changes will be made
+2025-11-04 09:42:01 [TEST] [INFO] Getting VM inventory data
+2025-11-04 09:42:35 [TEST] [INFO] Exported VM discovery list to C:\Users\GrWay\OneDrive - Beazley Group\Documents\Scripts\DeploymentScript\Logs\DecomLogs\Reports\DECOMList_04112025_0942.csv
+2025-11-04 09:42:35 [TEST] [INFO] Starting decommission process for 6 servers
+2025-11-04 09:42:35 [TEST] [INFO] Processing server: UKPRAP304
+2025-11-04 09:42:35 [TEST] [INFO] UKPRAP304 is member of app.WindowsUpdate.EMEA.ProdServers.4
+2025-11-04 09:42:35 [TEST] [INFO] Checking SCOM registration for UKPRAP304.bfl.local on UKPRAP184
+2025-11-04 09:42:35 [TEST] [ERROR] Error checking SCOM status for UKPRAP304.bfl.local : [UKPRAP184] Connecting to remote server UKPRAP184 failed with the following error message : Access is denied. For more information, see the about_Remote_Troubleshooting Help topic.
+2025-11-04 09:42:35 [TEST] [INFO] Completed processing: UKPRAP304
+2025-11-04 09:42:35 [TEST] [INFO] Processing server: UKPRAP215
+2025-11-04 09:42:41 [TEST] [INFO] VM UKPRAP215 last powered off: 10/24/2025 15:44:22 (10.7 days ago)
+2025-11-04 09:42:45 [TEST] [ERROR] Error checking DNS records: Failed to get the zone information for bfl.local on server ukprdc014.
+2025-11-04 09:42:45 [TEST] [WARN] AD lookup failed for UKPRAP215 : Cannot convert argument "c", with value: "Error checking DNS records: Failed to get the zone information for bfl.local on server ukprdc014.", for "AddRange" to type "System.Collections.ICollection": "Cannot convert the "Error checking DNS records: Failed to get the zone information for bfl.local on server ukprdc014." value of type "System.String" to type "System.Collections.ICollection"."
+2025-11-04 09:42:45 [TEST] [INFO] UKPRAP215 is member of app.WindowsUpdate.EMEA.ProdServers.4
+2025-11-04 09:42:45 [TEST] [INFO] Checking SCOM registration for UKPRAP215.bfl.local on UKPRAP184
+2025-11-04 09:42:45 [TEST] [ERROR] Error checking SCOM status for UKPRAP215.bfl.local : [UKPRAP184] Connecting to remote server UKPRAP184 failed with the following error message : Access is denied. For more information, see the about_Remote_Troubleshooting Help topic.
+2025-11-04 09:42:45 [TEST] [INFO] Completed processing: UKPRAP215
+2025-11-04 09:42:45 [TEST] [INFO] Processing server: UKDVAP128
+2025-11-04 09:42:45 [TEST] [WARN] AD lookup failed for UKDVAP128 : Cannot find an object with identity: 'UKDVAP128' under: 'DC=bfl,DC=local'.
+2025-11-04 09:42:45 [TEST] [INFO] Completed processing: UKDVAP128
+2025-11-04 09:42:45 [TEST] [INFO] Processing server: UKPRDB095
+2025-11-04 09:42:49 [TEST] [INFO] VM UKPRDB095 last powered off: 10/24/2025 15:47:23 (10.7 days ago)
+2025-11-04 09:42:49 [TEST] [ERROR] Error checking DNS records: Failed to get the zone information for bfl.local on server ukprdc014.
+2025-11-04 09:42:49 [TEST] [WARN] AD lookup failed for UKPRDB095 : Cannot convert argument "c", with value: "Error checking DNS records: Failed to get the zone information for bfl.local on server ukprdc014.", for "AddRange" to type "System.Collections.ICollection": "Cannot convert the "Error checking DNS records: Failed to get the zone information for bfl.local on server ukprdc014." value of type "System.String" to type "System.Collections.ICollection"."
+2025-11-04 09:42:50 [TEST] [INFO] UKPRDB095 is member of app.WindowsUpdate.EMEA.ProdServers.3
+2025-11-04 09:42:50 [TEST] [INFO] Checking SCOM registration for UKPRDB095.bfl.local on UKPRAP184
+2025-11-04 09:42:50 [TEST] [ERROR] Error checking SCOM status for UKPRDB095.bfl.local : [UKPRAP184] Connecting to remote server UKPRAP184 failed with the following error message : Access is denied. For more information, see the about_Remote_Troubleshooting Help topic.
+2025-11-04 09:42:50 [TEST] [INFO] Completed processing: UKPRDB095
+2025-11-04 09:42:50 [TEST] [INFO] Processing server: UKDVAP081 - Claim Center SQL/WEB
+2025-11-04 09:42:50 [TEST] [WARN] AD lookup failed for UKDVAP081 - Claim Center SQL/WEB : Cannot find an object with identity: 'UKDVAP081 - Claim Center SQL/WEB' under: 'DC=bfl,DC=local'.
+2025-11-04 09:42:50 [TEST] [INFO] Completed processing: UKDVAP081 - Claim Center SQL/WEB
+2025-11-04 09:42:50 [TEST] [INFO] Processing server: UKPRAP216
+2025-11-04 09:42:53 [TEST] [INFO] VM UKPRAP216 last powered off: 10/24/2025 15:43:06 (10.7 days ago)
+2025-11-04 09:42:53 [TEST] [ERROR] Error checking DNS records: Failed to get the zone information for bfl.local on server ukprdc014.
+2025-11-04 09:42:54 [TEST] [WARN] AD lookup failed for UKPRAP216 : Cannot convert argument "c", with value: "Error checking DNS records: Failed to get the zone information for bfl.local on server ukprdc014.", for "AddRange" to type "System.Collections.ICollection": "Cannot convert the "Error checking DNS records: Failed to get the zone information for bfl.local on server ukprdc014." value of type "System.String" to type "System.Collections.ICollection"."
+2025-11-04 09:42:54 [TEST] [INFO] UKPRAP216 is member of app.WindowsUpdate.EMEA.ProdServers.4
+2025-11-04 09:42:54 [TEST] [INFO] Checking SCOM registration for UKPRAP216.bfl.local on UKPRAP184
+2025-11-04 09:42:54 [TEST] [ERROR] Error checking SCOM status for UKPRAP216.bfl.local : [UKPRAP184] Connecting to remote server UKPRAP184 failed with the following error message : Access is denied. For more information, see the about_Remote_Troubleshooting Help topic.
+2025-11-04 09:42:54 [TEST] [INFO] Completed processing: UKPRAP216
+2025-11-04 09:42:54 [TEST] [INFO] Results exported to: C:\Users\GrWay\OneDrive - Beazley Group\Documents\Scripts\DeploymentScript\Logs\DecomLogs\Reports\ServerStatus_Report_20251104_094153-ALL.csv
+2025-11-04 09:42:54 [TEST] [INFO] Decommission process completed in TEST MODE
+2025-11-04 09:42:54 [TEST] [INFO] Disconnected from vCenter servers

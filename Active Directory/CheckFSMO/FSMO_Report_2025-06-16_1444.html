@@ -1,0 +1,27 @@
+<html>
+<head>
+<style>
+body { font-family: Calibri, sans-serif; font-size: 14px; }
+table { border-collapse: collapse; width: 100%; margin-bottom: 20px; }
+th, td { border: 1px solid #ccc; padding: 8px; vertical-align: top; }
+th { background-color: #f2f2f2; }
+.pass { color: green; font-weight: bold; }
+.fail { color: red; font-weight: bold; }
+</style>
+<title>FSMO Best Practices Report</title>
+</head>
+<body>
+<h2>FSMO Role Holders</h2>
+<table>
+<tr><th>FSMO Role</th><th>Holder</th></tr><tr><td>PDC</td><td>UKPRDC011.bfl.local</td></tr>
+<tr><td>RID pool manager</td><td>UKPRDC011.bfl.local</td></tr>
+<tr><td>Infrastructure master</td><td>UKPRDC011.bfl.local</td></tr>
+<tr><td>Schema master</td><td>UKPRDC011.bfl.local</td></tr>
+<tr><td>Domain naming master</td><td>UKPRDC011.bfl.local</td></tr>
+</table>
+<h2>Best Practice Evaluation</h2>
+<table>
+<tr><th>Check</th><th>Result</th><th>Details</th><th>Rationale</th></tr><tr><td>RID, PDC, and Infrastructure on same DC</td><td class='pass'>True</td><td>All on UKPRDC011.bfl.local</td><td>✅ Keeping RID, PDC, and Infrastructure together improves performance and avoids replication delays during account provisioning.</td></tr>
+<tr><td>Schema & Domain Naming separated from core FSMO roles</td><td class='fail'>False</td><td>Schema=UKPRDC011.bfl.local, DomainNaming=UKPRDC011.bfl.local, CoreRoles on UKPRDC011.bfl.local</td><td>❌ Keeping all roles on one DC increases risk. Schema/Naming should be isolated due to their critical but infrequent use.</td></tr>
+<tr><td>Replication Health</td><td class='pass'>True</td><td>No replication failures detected.</td><td>✅ Replication is fully healthy. AD changes are syncing correctly across domain controllers.</td></tr></table>
+</body></html>

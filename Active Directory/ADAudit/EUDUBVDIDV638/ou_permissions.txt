@@ -1,0 +1,112 @@
+OU: OU=Servers & Exceptions,OU=Marlborough,OU=Accounts Computer,DC=bfl,DC=local
+[!] Rights: NT AUTHORITY\Authenticated Users CreateChild Allow
+OU: DC=100.168.192.in-addr.arpa\0ACNF:436e81be-4f49-47bf-85aa-bae0e5199725,CN=MicrosoftDNS,CN=System,DC=bfl,DC=local
+[!] Rights: NT AUTHORITY\Authenticated Users CreateChild Allow
+OU: DC=brio.lloyds,CN=MicrosoftDNS,CN=System,DC=bfl,DC=local
+[!] Rights: NT AUTHORITY\Authenticated Users CreateChild Allow
+OU: DC=lloyds,CN=MicrosoftDNS,CN=System,DC=bfl,DC=local
+[!] Rights: NT AUTHORITY\Authenticated Users CreateChild Allow
+OU: DC=domino,DC=lloyds,CN=MicrosoftDNS,CN=System,DC=bfl,DC=local
+[!] Rights: NT AUTHORITY\Authenticated Users GenericAll Allow
+OU: DC=info.lloyds,CN=MicrosoftDNS,CN=System,DC=bfl,DC=local
+[!] Rights: NT AUTHORITY\Authenticated Users CreateChild Allow
+OU: DC=beazley.com,CN=MicrosoftDNS,CN=System,DC=bfl,DC=local
+[!] Rights: NT AUTHORITY\Authenticated Users CreateChild Allow
+OU: DC=xchanging,CN=MicrosoftDNS,CN=System,DC=bfl,DC=local
+[!] Rights: NT AUTHORITY\Authenticated Users CreateChild Allow
+OU: DC=232.115.151.in-addr.arpa\0ACNF:fef9e2ac-2ca2-4503-aea8-1fd7afa5c484,CN=MicrosoftDNS,CN=System,DC=bfl,DC=local
+[!] Rights: NT AUTHORITY\Authenticated Users CreateChild Allow
+OU: DC=beazleytrade.com,CN=MicrosoftDNS,CN=System,DC=bfl,DC=local
+[!] Rights: NT AUTHORITY\Authenticated Users CreateChild Allow
+OU: DC=lnslnmsu4,DC=lloyds,CN=MicrosoftDNS,CN=System,DC=bfl,DC=local
+[!] Rights: NT AUTHORITY\Authenticated Users CreateChild Allow
+OU: DC=lnslnmsu3,DC=lloyds,CN=MicrosoftDNS,CN=System,DC=bfl,DC=local
+[!] Rights: NT AUTHORITY\Authenticated Users CreateChild Allow
+OU: DC=mkt01,DC=lloyds,CN=MicrosoftDNS,CN=System,DC=bfl,DC=local
+[!] Rights: NT AUTHORITY\Authenticated Users CreateChild Allow
+OU: DC=acc.cmr,DC=lloyds,CN=MicrosoftDNS,CN=System,DC=bfl,DC=local
+[!] Rights: NT AUTHORITY\Authenticated Users CreateChild Allow
+OU: CN=Finance Planning,OU=Shared Mailboxes,OU=Shared Groups,DC=bfl,DC=local
+[!] Rights: Everyone GenericAll Allow
+OU: CN=Projector 1.x,OU=Mailbox Disabled,OU=Accounts User,OU=_Disabled,DC=bfl,DC=local
+[!] Rights: Everyone Everyone Everyone Everyone Everyone Everyone Everyone Everyone Everyone ReadProperty, WriteProperty ReadProperty, WriteProperty ReadProperty, WriteProperty ReadProperty, WriteProperty ReadProperty, WriteProperty ReadProperty, WriteProperty ReadProperty, WriteProperty ReadProperty, WriteProperty ReadProperty, WriteProperty Allow Allow Allow Allow Allow Allow Allow Allow Allow
+OU: CN=sec.w2kfileserver.groups.crossbusiness.confofint2021-RW,OU=_CrossBusiness,OU=FolderSecurity,OU=Shared Groups,DC=bfl,DC=local
+[!] Rights: NT AUTHORITY\Authenticated Users NT AUTHORITY\Authenticated Users NT AUTHORITY\Authenticated Users NT AUTHORITY\Authenticated Users NT AUTHORITY\Authenticated Users WriteProperty WriteProperty WriteProperty WriteProperty Self Allow Allow Allow Allow Allow
+OU: CN=DBS.SQL.Sircon.RW,OU=Databases,OU=Shared Groups,DC=bfl,DC=local
+[!] Rights: NT AUTHORITY\Authenticated Users NT AUTHORITY\Authenticated Users NT AUTHORITY\Authenticated Users NT AUTHORITY\Authenticated Users NT AUTHORITY\Authenticated Users WriteProperty WriteProperty WriteProperty WriteProperty Self Allow Allow Allow Allow Allow
+OU: CN=Exchange Rules Sent Items Update,CN=IEPRAP021,OU=Exchange 2007,OU=Servers & Exceptions,OU=London,OU=Accounts Computer,DC=bfl,DC=local
+[!] Rights: Everyone GenericAll Allow
+OU: CN=Exchange Rules Attendant,CN=IEPRAP021,OU=Exchange 2007,OU=Servers & Exceptions,OU=London,OU=Accounts Computer,DC=bfl,DC=local
+[!] Rights: Everyone GenericAll Allow
+OU: CN=CodeTwo Exchange Rules Service,CN=IEPRAP021,OU=Exchange 2007,OU=Servers & Exceptions,OU=London,OU=Accounts Computer,DC=bfl,DC=local
+[!] Rights: Everyone GenericAll Allow
+OU: CN=Exchange Rules Attendant,CN=IEPRAP020,OU=Exchange 2007,OU=Servers & Exceptions,OU=London,OU=Accounts Computer,DC=bfl,DC=local
+[!] Rights: Everyone GenericAll Allow
+OU: CN=Exchange Rules Sent Items Update,CN=IEPRAP020,OU=Exchange 2007,OU=Servers & Exceptions,OU=London,OU=Accounts Computer,DC=bfl,DC=local
+[!] Rights: Everyone GenericAll Allow
+OU: CN=CodeTwo Exchange Rules Service,CN=IEPRAP020,OU=Exchange 2007,OU=Servers & Exceptions,OU=London,OU=Accounts Computer,DC=bfl,DC=local
+[!] Rights: Everyone GenericAll Allow
+OU: CN=Exchange Rules Attendant,CN=UKPRAP220,OU=Exchange 2007,OU=Servers & Exceptions,OU=London,OU=Accounts Computer,DC=bfl,DC=local
+[!] Rights: Everyone GenericAll Allow
+OU: CN=Exchange Rules Sent Items Update,CN=UKPRAP220,OU=Exchange 2007,OU=Servers & Exceptions,OU=London,OU=Accounts Computer,DC=bfl,DC=local
+[!] Rights: Everyone GenericAll Allow
+OU: CN=CodeTwo Exchange Rules Service,CN=UKPRAP220,OU=Exchange 2007,OU=Servers & Exceptions,OU=London,OU=Accounts Computer,DC=bfl,DC=local
+[!] Rights: Everyone GenericAll Allow
+OU: CN=Exchange Rules Attendant,CN=UKPRAP221,OU=Exchange 2007,OU=Servers & Exceptions,OU=London,OU=Accounts Computer,DC=bfl,DC=local
+[!] Rights: Everyone GenericAll Allow
+OU: CN=Exchange Rules Sent Items Update,CN=UKPRAP221,OU=Exchange 2007,OU=Servers & Exceptions,OU=London,OU=Accounts Computer,DC=bfl,DC=local
+[!] Rights: Everyone GenericAll Allow
+OU: CN=CodeTwo Exchange Rules Service,CN=UKPRAP221,OU=Exchange 2007,OU=Servers & Exceptions,OU=London,OU=Accounts Computer,DC=bfl,DC=local
+[!] Rights: Everyone GenericAll Allow
+OU: CN=Exchange Rules Attendant,CN=USPRAP023,OU=Exchange,OU=Servers & Exceptions,OU=Hawthorne,OU=Accounts Computer,DC=bfl,DC=local
+[!] Rights: Everyone GenericAll Allow
+OU: CN=Exchange Rules Sent Items Update,CN=USPRAP023,OU=Exchange,OU=Servers & Exceptions,OU=Hawthorne,OU=Accounts Computer,DC=bfl,DC=local
+[!] Rights: Everyone GenericAll Allow
+OU: CN=CodeTwo Exchange Rules Service,CN=USPRAP023,OU=Exchange,OU=Servers & Exceptions,OU=Hawthorne,OU=Accounts Computer,DC=bfl,DC=local
+[!] Rights: Everyone GenericAll Allow
+OU: CN=Exchange Rules Attendant,CN=USPRAP022,OU=Exchange,OU=Servers & Exceptions,OU=Hawthorne,OU=Accounts Computer,DC=bfl,DC=local
+[!] Rights: Everyone GenericAll Allow
+OU: CN=Exchange Rules Sent Items Update,CN=USPRAP022,OU=Exchange,OU=Servers & Exceptions,OU=Hawthorne,OU=Accounts Computer,DC=bfl,DC=local
+[!] Rights: Everyone GenericAll Allow
+OU: CN=CodeTwo Exchange Rules Service,CN=USPRAP022,OU=Exchange,OU=Servers & Exceptions,OU=Hawthorne,OU=Accounts Computer,DC=bfl,DC=local
+[!] Rights: Everyone GenericAll Allow
+OU: CN=Exchange Rules Attendant,CN=USPRAP020,OU=Exchange,OU=Servers & Exceptions,OU=Marlborough,OU=Accounts Computer,DC=bfl,DC=local
+[!] Rights: Everyone GenericAll Allow
+OU: CN=Exchange Rules Sent Items Update,CN=USPRAP020,OU=Exchange,OU=Servers & Exceptions,OU=Marlborough,OU=Accounts Computer,DC=bfl,DC=local
+[!] Rights: Everyone GenericAll Allow
+OU: CN=CodeTwo Exchange Rules Service,CN=USPRAP020,OU=Exchange,OU=Servers & Exceptions,OU=Marlborough,OU=Accounts Computer,DC=bfl,DC=local
+[!] Rights: Everyone GenericAll Allow
+OU: CN=Exchange Rules Attendant,CN=USPRAP019,OU=Exchange,OU=Servers & Exceptions,OU=Marlborough,OU=Accounts Computer,DC=bfl,DC=local
+[!] Rights: Everyone GenericAll Allow
+OU: CN=Exchange Rules Sent Items Update,CN=USPRAP019,OU=Exchange,OU=Servers & Exceptions,OU=Marlborough,OU=Accounts Computer,DC=bfl,DC=local
+[!] Rights: Everyone GenericAll Allow
+OU: CN=CodeTwo Exchange Rules Service,CN=USPRAP019,OU=Exchange,OU=Servers & Exceptions,OU=Marlborough,OU=Accounts Computer,DC=bfl,DC=local
+[!] Rights: Everyone GenericAll Allow
+OU: OU=Servers & Exceptions,OU=Marlborough,OU=Accounts Computer,DC=bfl,DC=local
+[!] Rights: NT AUTHORITY\Authenticated Users CreateChild Allow
+OU: DC=brio.lloyds,CN=MicrosoftDNS,CN=System,DC=bfl,DC=local
+[!] Rights: NT AUTHORITY\Authenticated Users CreateChild Allow
+OU: DC=lloyds,CN=MicrosoftDNS,CN=System,DC=bfl,DC=local
+[!] Rights: NT AUTHORITY\Authenticated Users CreateChild Allow
+OU: DC=domino,DC=lloyds,CN=MicrosoftDNS,CN=System,DC=bfl,DC=local
+[!] Rights: NT AUTHORITY\Authenticated Users GenericAll Allow
+OU: DC=info.lloyds,CN=MicrosoftDNS,CN=System,DC=bfl,DC=local
+[!] Rights: NT AUTHORITY\Authenticated Users CreateChild Allow
+OU: DC=beazley.com,CN=MicrosoftDNS,CN=System,DC=bfl,DC=local
+[!] Rights: NT AUTHORITY\Authenticated Users CreateChild Allow
+OU: DC=xchanging,CN=MicrosoftDNS,CN=System,DC=bfl,DC=local
+[!] Rights: NT AUTHORITY\Authenticated Users CreateChild Allow
+OU: DC=beazleytrade.com,CN=MicrosoftDNS,CN=System,DC=bfl,DC=local
+[!] Rights: NT AUTHORITY\Authenticated Users CreateChild Allow
+OU: DC=lnslnmsu4,DC=lloyds,CN=MicrosoftDNS,CN=System,DC=bfl,DC=local
+[!] Rights: NT AUTHORITY\Authenticated Users CreateChild Allow
+OU: DC=lnslnmsu3,DC=lloyds,CN=MicrosoftDNS,CN=System,DC=bfl,DC=local
+[!] Rights: NT AUTHORITY\Authenticated Users CreateChild Allow
+OU: DC=mkt01,DC=lloyds,CN=MicrosoftDNS,CN=System,DC=bfl,DC=local
+[!] Rights: NT AUTHORITY\Authenticated Users CreateChild Allow
+OU: DC=acc.cmr,DC=lloyds,CN=MicrosoftDNS,CN=System,DC=bfl,DC=local
+[!] Rights: NT AUTHORITY\Authenticated Users CreateChild Allow
+OU: CN=Finance Planning,OU=Shared Mailboxes,OU=Shared Groups,DC=bfl,DC=local
+[!] Rights: Everyone GenericAll Allow
+OU: CN=Projector 1.x,OU=Mailbox Disabled,OU=Accounts User,OU=_Disabled,DC=bfl,DC=local
+[!] Rights: Everyone Everyone Everyone Everyone Everyone Everyone Everyone Everyone Everyone ReadProperty, WriteProperty ReadProperty, WriteProperty ReadProperty, WriteProperty ReadProperty, WriteProperty ReadProperty, WriteProperty ReadProperty, WriteProperty ReadProperty, WriteProperty ReadProperty, WriteProperty ReadProperty, WriteProperty Allow Allow Allow Allow Allow Allow Allow Allow Allow

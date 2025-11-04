@@ -1,0 +1,56 @@
+{
+  "VMware": {
+    "VCSA": "usprim004.bfl.local",
+    "Cluster": "HAW-Local",
+    "VMHost": null,
+    "VMFolder": "Production",
+    "TemplatesFolderName": "Templates",
+    "Network": "VLAN_2002_Stretch",
+    "Datastore": "",
+    "DatastoreCluster": "HAW_LOCAL_CLUSTER",
+    "ContentLibrary": {
+      "Library": "Packer templates",
+      "Item": "PKR_windows_server_2022_std_Current",
+      "LocalTemplateName": null,
+      "ForceReplace": true
+    },
+    "VMName": "USPRDB117",
+    "CustomizationSpec": "Win2022_Template",
+    "Hardware": {
+      "CPU": 8,
+      "MemoryGB": 80,
+      "DiskGB": 200,
+      "AdditionalDisks": [
+        20,
+        1000,
+        25,
+        10000,
+        1000,
+        1000
+      ],
+      "Sockets": 1,
+      "CoresPerSocket": 8
+    }
+  },
+  "Options": {
+    "PowerOn": true,
+    "EnsureNICConnected": true,
+    "RemoveExtraCDROMs": true,
+    "ToolsWaitSeconds": 90,
+    "PostPowerOnDelay": 15
+  },
+  "AD": {
+    "TargetOU": "OU=Application Servers,OU=Servers & Exceptions,OU=Hawthorne,OU=Accounts Computer,DC=bfl,DC=local",
+    "Server": "USPRDC036.bfl.local",
+    "UseVCenterCreds": true,
+    "WaitForSeconds": 180
+  },
+  "PostDeploy": {
+    "EnableTags": true,
+    "EnableInstallers": false,
+    "LocalAdminGroups": [],
+    "IvantiGroup": null,
+    "PowerPlan": null
+  },
+  "ChangeRequestNumber": "CHG0090166 Insight DB"
+}

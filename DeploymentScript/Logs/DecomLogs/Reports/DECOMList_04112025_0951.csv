@@ -1,0 +1,7 @@
+"Hostname","Datastore","PowerState","Notes","OS"
+"UKPRAP304","DB4_Vol212","PoweredOn","Octopus script/DB runner - CHG0058951 - replacement for UKPRAP080","Unable to retrieve OS"
+"UKPRAP215","LD9_Vol222","PoweredOff","RBv21 App prod OM","Unable to retrieve OS"
+"UKDVAP128","DB4_Vol210","PoweredOn","Oasis LMF","Unable to retrieve OS"
+"UKPRDB095","LD9_Vol212","PoweredOff","RBv21 Open Market Prod	No change ticket","Unable to retrieve OS"
+"UKDVAP081 - Claim Center SQL/WEB","DB4_Vol228","PoweredOn","Claim Center SQL/WEB - Paul Forbes - CHG0034435","Unable to retrieve OS"
+"UKPRAP216","LD9_Vol222","PoweredOff","RBv21 App prod OM","Unable to retrieve OS"

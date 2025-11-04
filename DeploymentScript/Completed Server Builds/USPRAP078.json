@@ -1,0 +1,56 @@
+{
+  "VMware": {
+    "VCSA": "usprim004.bfl.local",
+    "Cluster": "Compute",
+    "VMHost": "haw-b2ngpu-sp01.bfl.local",
+    "VMFolder": "BeazleyPro 2",
+    "TemplatesFolderName": "Templates",
+    "Network": "VLAN_3001_Stretch",
+    "Datastore": "",
+    "DatastoreCluster": "PROD_POD_CLUSTER",
+    "ContentLibrary": {
+      "Library": "Packer templates",
+      "Item": "PKR_windows_server_2022_std_Current",
+      "LocalTemplateName": null,
+      "ForceReplace": true
+    },
+    "VMName": "USPRAP078",
+    "CustomizationSpec": "Win2022_Template",
+    "Hardware": {
+      "CPU": 4,
+      "MemoryGB": 12,
+      "DiskGB": 100,
+      "Sockets": 1,
+      "CoresPerSocket": 4
+    }
+  },
+
+  "AD": {
+    "TargetOU": "OU=IIS,OU=Test,OU=Servers & Exceptions,OU=London,OU=Accounts Computer,DC=bfl,DC=local",
+    "Server": "UKPRDC011.bfl.local",
+    "UseVCenterCreds": true,
+    "WaitForSeconds": 600
+  },
+
+  "Options": {
+    "PowerOn": true,
+    "EnsureNICConnected": true,
+    "RemoveExtraCDROMs": true,
+    "PackageLogDir": "C:\\Beazley\Logs"   // optional, defaults to C:\BuildLogs
+  },
+
+  "Packages": [
+    {
+      "Name": "CrowdStrike Falcon",
+      "Source": "\\\\bfl.local\\global\\Support\\UK\\Software & Tech Docs\\Third Party Applications\\CrowdStrike Falcon\\Windows",
+      "Installer": "FalconSensor_Windows.exe",
+      "Args": "/install CID=ADB1C14C8F2B4BF6BAAE8ACC90511E6C-71 /quiet",
+      "LocalDir": "C:\\Packages\\CrowdStrike",
+      "TimeoutSec": 900,
+      "PostCheck": { "Service": "CSFalconService" }
+    },
+    {
+      "Name": "7-Zip",
+      "Source": "\\\\bfl.local\\global\\Support\\UK\\Software & Tech Docs\\Third Party Applications\\7-Zip",
+      "Installer": "7z2301-x64.msi",
+      "Args"

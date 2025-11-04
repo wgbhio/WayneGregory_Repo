@@ -1,0 +1,36 @@
+2025-11-04 10:01:30 [TEST] [INFO] Connected to vCenter servers: ukprim098.bfl.local, usprim004.bfl.local, ieprim018.bfl.local
+2025-11-04 10:01:30 [TEST] [INFO] Script started in TEST MODE - no changes will be made
+2025-11-04 10:01:30 [TEST] [INFO] Getting VM inventory data
+2025-11-04 10:02:02 [TEST] [INFO] Exported VM discovery list to C:\Users\GrWay\OneDrive - Beazley Group\Documents\Scripts\DeploymentScript\Logs\DecomLogs\Reports\DECOMList_04112025_1002.csv
+2025-11-04 10:02:02 [TEST] [INFO] Starting decommission process for 6 servers
+2025-11-04 10:02:02 [TEST] [INFO] Processing server: UKPRAP304
+2025-11-04 10:02:05 [TEST] [INFO] No Windows Update groups found for UKPRAP304
+2025-11-04 10:02:05 [TEST] [INFO] Checking SCOM registration for UKPRAP304.bfl.local on UKPRAP184
+2025-11-04 10:02:11 [TEST] [INFO] Completed processing: UKPRAP304
+2025-11-04 10:02:11 [TEST] [INFO] Processing server: UKPRAP215
+2025-11-04 10:02:15 [TEST] [INFO] VM UKPRAP215 last powered off: 10/24/2025 15:44:22 (10.8 days ago)
+2025-11-04 10:02:21 [TEST] [INFO] No DNS records found for UKPRAP215.bfl.local
+2025-11-04 10:02:22 [TEST] [INFO] No Windows Update groups found for UKPRAP215
+2025-11-04 10:02:22 [TEST] [INFO] Checking SCOM registration for UKPRAP215.bfl.local on UKPRAP184
+2025-11-04 10:02:34 [TEST] [INFO] Completed processing: UKPRAP215
+2025-11-04 10:02:34 [TEST] [INFO] Processing server: UKDVAP128
+2025-11-04 10:02:36 [TEST] [WARN] AD lookup failed for UKDVAP128
+2025-11-04 10:02:36 [TEST] [INFO] Completed processing: UKDVAP128
+2025-11-04 10:02:36 [TEST] [INFO] Processing server: UKPRDB095
+2025-11-04 10:02:40 [TEST] [INFO] VM UKPRDB095 last powered off: 10/24/2025 15:47:23 (10.8 days ago)
+2025-11-04 10:02:45 [TEST] [INFO] No DNS records found for UKPRDB095.bfl.local
+2025-11-04 10:02:47 [TEST] [INFO] No Windows Update groups found for UKPRDB095
+2025-11-04 10:02:47 [TEST] [INFO] Checking SCOM registration for UKPRDB095.bfl.local on UKPRAP184
+2025-11-04 10:02:49 [TEST] [INFO] Completed processing: UKPRDB095
+2025-11-04 10:02:49 [TEST] [INFO] Processing server: UKDVAP081 - Claim Center SQL/WEB
+2025-11-04 10:02:50 [TEST] [WARN] AD lookup failed for UKDVAP081 - Claim Center SQL/WEB
+2025-11-04 10:02:50 [TEST] [INFO] Completed processing: UKDVAP081 - Claim Center SQL/WEB
+2025-11-04 10:02:50 [TEST] [INFO] Processing server: UKPRAP216
+2025-11-04 10:02:54 [TEST] [INFO] VM UKPRAP216 last powered off: 10/24/2025 15:43:06 (10.8 days ago)
+2025-11-04 10:02:59 [TEST] [INFO] No DNS records found for UKPRAP216.bfl.local
+2025-11-04 10:03:00 [TEST] [INFO] No Windows Update groups found for UKPRAP216
+2025-11-04 10:03:00 [TEST] [INFO] Checking SCOM registration for UKPRAP216.bfl.local on UKPRAP184
+2025-11-04 10:03:10 [TEST] [INFO] Completed processing: UKPRAP216
+2025-11-04 10:03:10 [TEST] [INFO] Results exported to: C:\Users\GrWay\OneDrive - Beazley Group\Documents\Scripts\DeploymentScript\Logs\DecomLogs\Reports\ServerStatus_Report_20251104_100123-ALL.csv
+2025-11-04 10:03:10 [TEST] [INFO] Decommission process completed in TEST MODE
+2025-11-04 10:03:10 [TEST] [INFO] Disconnected from vCenter servers

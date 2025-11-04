@@ -1,0 +1,646 @@
+ _____ ____     _____       _ _ _
+|  _  |    \   |  _  |_ _ _| |_| |_
+|     |  |  |  |     | | | . | |  _|
+|__|__|____/   |__|__|___|___|_|_|
+v6.0                  by phillips321
+
+[*] Script start time 05/02/2025 16:04:05
+[*] Lang specific variables
+    [+] Administrators               : Administrators
+    [+] Users                        : Users
+    [+] Domain Admins                : Domain Admins
+    [+] Domain Users                 : Domain Users
+    [+] Domain Controllers           : Domain Controllers
+    [+] Schema Admins                : Schema Admins
+    [+] Enterprise Admins            : Enterprise Admins
+    [+] Everyone                     : Everyone
+    [+] Entreprise Domain Controllers: NT AUTHORITY\ENTERPRISE DOMAIN CONTROLLERS
+    [+] Authenticated Users          : NT AUTHORITY\Authenticated Users
+    [+] System                       : NT AUTHORITY\SYSTEM
+    [+] Local Service                : NT AUTHORITY\LOCAL SERVICE
+[*] Device Information
+    [+] Device Name:  EUDUBVDIDV638
+    [+] Domain Name:  BFL
+    [+] User Name  :  a1_wg7
+    [+] NT Version :  10
+    [+] IP Address :  10.183.122.21
+[*] Domain Audit
+    [+] Checking Windows Update
+        [+] Windows is up to date on UKPRDC011, last install: 04/19/2025 00:00:00
+        [+] Windows is up to date on UKPRDC012, last install: 04/18/2025 00:00:00
+        [+] Windows is up to date on UKPRDC013, last install: 04/18/2025 00:00:00
+        [+] Windows is up to date on IEPRDC011, last install: 04/19/2025 00:00:00
+        [+] Windows is up to date on IEPRDC010, last install: 04/19/2025 00:00:00
+        [+] Windows is up to date on IEPRDC012, last install: 04/18/2025 00:00:00
+        [+] Windows is up to date on IEPRDC013, last install: 04/13/2025 00:00:00
+        [+] Windows is up to date on USPRDC030, last install: 04/19/2025 00:00:00
+        [+] Windows is up to date on USPRDC031, last install: 04/19/2025 00:00:00
+        [+] Windows is up to date on USPRDC032, last install: 04/19/2025 00:00:00
+        [+] Windows is up to date on USPRDC033, last install: 04/19/2025 00:00:00
+        [+] Windows is up to date on USPRDC037, last install: 04/19/2025 00:00:00
+        [+] Windows is up to date on USPRDC034, last install: 04/19/2025 00:00:00
+        [+] Windows is up to date on USPRDC035, last install: 04/19/2025 00:00:00
+        [+] Windows is up to date on UKPRDC014, last install: 04/19/2025 00:00:00
+        [+] Windows is up to date on SGPRDC002, last install: 04/18/2025 00:00:00
+        [+] Windows is up to date on AZNEUDC001, last install: 04/19/2025 00:00:00
+        [+] Windows is up to date on AZCUSDC001, last install: 04/19/2025 00:00:00
+        [+] Windows is up to date on AZCUSDC002, last install: 04/19/2025 00:00:00
+        [+] Windows is up to date on AZEUS2DC001, last install: 04/19/2025 00:00:00
+        [+] Windows is up to date on AZEUS2DC004, last install: 04/19/2025 00:00:00
+        [+] Windows is up to date on AZEUS2DC002, last install: 04/19/2025 00:00:00
+        [+] Windows is up to date on AZEUS2DC003, last install: 04/19/2025 00:00:00
+        [+] Windows is up to date on AZWEUDC002, last install: 04/18/2025 00:00:00
+        [+] Windows is up to date on AZWEUDC003, last install: 04/19/2025 00:00:00
+        [+] Windows is up to date on AZWEUDC004, last install: 04/19/2025 00:00:00
+        [+] Windows is up to date on AZWEUDC001, last install: 04/18/2025 00:00:00
+        [+] Windows is up to date on AZNEUDC002, last install: 04/19/2025 00:00:00
+        [+] Windows is up to date on USPRDC036, last install: 04/19/2025 00:00:00
+        [!] Windows is not up to date on USPRDC041, last install: 03/25/2025 00:00:00
+        [+] Windows is up to date on USPRDC038, last install: 04/10/2025 00:00:00
+        [!] Windows is not up to date on USPRDC040, last install: 03/25/2025 00:00:00
+        [+] Windows is up to date on USPRDC039, last install: 04/08/2025 00:00:00
+    [!] Operating system differs across DCs!!!
+        [+] Domain controllers with WS 2016
+            [-] UKPRDC011 has Windows Server 2016 Standard
+            [-] UKPRDC012 has Windows Server 2016 Standard
+            [-] UKPRDC013 has Windows Server 2016 Standard
+            [-] IEPRDC011 has Windows Server 2016 Standard
+            [-] IEPRDC010 has Windows Server 2016 Standard
+            [-] IEPRDC012 has Windows Server 2016 Standard
+            [-] IEPRDC013 has Windows Server 2016 Standard
+            [-] USPRDC030 has Windows Server 2016 Standard
+            [-] USPRDC031 has Windows Server 2016 Standard
+            [-] USPRDC032 has Windows Server 2016 Standard
+            [-] USPRDC033 has Windows Server 2016 Standard
+            [-] USPRDC037 has Windows Server 2016 Standard
+            [-] USPRDC034 has Windows Server 2016 Standard
+            [-] USPRDC035 has Windows Server 2016 Standard
+            [-] UKPRDC014 has Windows Server 2016 Standard
+            [-] SGPRDC002 has Windows Server 2016 Standard
+            [-] AZNEUDC001 has Windows Server 2016 Datacenter
+            [-] AZCUSDC001 has Windows Server 2016 Datacenter
+            [-] AZCUSDC002 has Windows Server 2016 Datacenter
+            [-] AZEUS2DC001 has Windows Server 2016 Datacenter
+            [-] AZEUS2DC004 has Windows Server 2016 Datacenter
+            [-] AZEUS2DC002 has Windows Server 2016 Datacenter
+            [-] AZEUS2DC003 has Windows Server 2016 Datacenter
+            [-] AZWEUDC002 has Windows Server 2016 Datacenter
+            [-] AZWEUDC003 has Windows Server 2016 Datacenter
+            [-] AZWEUDC004 has Windows Server 2016 Datacenter
+            [-] AZWEUDC001 has Windows Server 2016 Datacenter
+            [-] AZNEUDC002 has Windows Server 2016 Datacenter
+            [-] USPRDC036 has Windows Server 2016 Standard
+            [-] USPRDC041 has Windows Server 2016 Standard
+            [-] USPRDC038 has Windows Server 2016 Standard
+            [-] USPRDC040 has Windows Server 2016 Standard
+            [-] USPRDC039 has Windows Server 2016 Standard
+    [+] All DCs have the same hotfix of []
+    [+] All DCs have the same Service Pack of []
+    [+] All DCs have the same OS Version of [10.0 (14393)]
+    [!] DC UKPRDC011.bfl.local holds all FSMO roles!
+    [!] You have DCs with RC4 or DES allowed for Kerberos!!!
+    [+] New joined computers are stored in OU=_Unmanaged,OU=Accounts Computer,DC=bfl,DC=local
+    [+] New users are stored in OU=_Unmanaged,OU=Accounts User,DC=bfl,DC=local
+    [+] Checking NTP configuration
+        [+] UKPRDC011 is syncing time from 10.183.73.24,0x8 
+        [+] UKPRDC012 is syncing time from UKPRDC011.bfl.local 
+        [+] UKPRDC013 is syncing time from UKPRDC011.bfl.local 
+        [+] IEPRDC011 is syncing time from UKPRDC011.bfl.local 
+        [+] IEPRDC010 is syncing time from UKPRDC011.bfl.local 
+        [+] IEPRDC012 is syncing time from UKPRDC011.bfl.local 
+        [+] IEPRDC013 is syncing time from UKPRDC011.bfl.local 
+        [+] USPRDC030 is syncing time from UKPRDC011.bfl.local 
+        [+] USPRDC031 is syncing time from UKPRDC011.bfl.local 
+        [+] USPRDC032 is syncing time from UKPRDC011.bfl.local 
+        [+] USPRDC033 is syncing time from UKPRDC011.bfl.local 
+        [+] USPRDC037 is syncing time from UKPRDC011.bfl.local 
+        [+] USPRDC034 is syncing time from UKPRDC011.bfl.local 
+        [+] USPRDC035 is syncing time from UKPRDC011.bfl.local 
+        [+] UKPRDC014 is syncing time from UKPRDC011.bfl.local 
+        [+] SGPRDC002 is syncing time from UKPRDC011.bfl.local 
+        [+] AZNEUDC001 is syncing time from VM IC Time Synchronization Provider
+        [+] AZCUSDC001 is syncing time from UKPRDC011.bfl.local 
+        [+] AZCUSDC002 is syncing time from UKPRDC011.bfl.local 
+        [+] AZEUS2DC001 is syncing time from UKPRDC011.bfl.local 
+        [+] AZEUS2DC004 is syncing time from UKPRDC011.bfl.local 
+        [+] AZEUS2DC002 is syncing time from UKPRDC011.bfl.local 
+        [+] AZEUS2DC003 is syncing time from UKPRDC011.bfl.local 
+        [+] AZWEUDC002 is syncing time from VM IC Time Synchronization Provider
+        [+] AZWEUDC003 is syncing time from VM IC Time Synchronization Provider
+        [+] AZWEUDC004 is syncing time from VM IC Time Synchronization Provider
+        [+] AZWEUDC001 is syncing time from VM IC Time Synchronization Provider
+        [+] AZNEUDC002 is syncing time from VM IC Time Synchronization Provider
+        [+] USPRDC036 is syncing time from UKPRDC011.bfl.local 
+        [+] USPRDC041 is syncing time from UKPRDC011.bfl.local 
+        [+] USPRDC038 is syncing time from UKPRDC011.bfl.local 
+        [+] USPRDC040 is syncing time from UKPRDC011.bfl.local 
+        [+] USPRDC039 is syncing time from UKPRDC011.bfl.local 
+    [!] Schema Admins not empty!!!
+    [!] Enterprise Admins not empty!!!
+    [!] Domain users can add 10 devices to the domain! (KB251)
+    [!] Excessive permissions in Default Domain Controllers Policy detected!
+    [!] SMBv1 is enabled! (KB290)
+    [!] DomainLevel is reduced for backwards compatibility to Windows2012R2Domain!
+    [!] ForestLevel is reduced for backwards compatibility to Windows2012R2Forest!
+    [!] We found 1 DCs not owned by Domains Admins group! see dcs_not_owned_by_da.txt
+    [+] DFSR mechanism is used to replicate across domain controllers.
+    [+] Checking SYSVOL and NETLOGON shares on all DCs
+    [+] Recycle Bin is enabled in the domain
+    [+] Checking services on all DCs
+        [!] Service dns cannot be checked on UKPRDC011!
+        [!] Service netlogon cannot be checked on UKPRDC011!
+        [!] Service kdc cannot be checked on UKPRDC011!
+        [!] Service w32time cannot be checked on UKPRDC011!
+        [!] Service ntds cannot be checked on UKPRDC011!
+        [!] Service dfsr cannot be checked on UKPRDC011!
+        [!] Service dns cannot be checked on UKPRDC012!
+        [!] Service netlogon cannot be checked on UKPRDC012!
+        [!] Service kdc cannot be checked on UKPRDC012!
+        [!] Service w32time cannot be checked on UKPRDC012!
+        [!] Service ntds cannot be checked on UKPRDC012!
+        [!] Service dfsr cannot be checked on UKPRDC012!
+        [!] Service dns cannot be checked on UKPRDC013!
+        [!] Service netlogon cannot be checked on UKPRDC013!
+        [!] Service kdc cannot be checked on UKPRDC013!
+        [!] Service w32time cannot be checked on UKPRDC013!
+        [!] Service ntds cannot be checked on UKPRDC013!
+        [!] Service dfsr cannot be checked on UKPRDC013!
+        [!] Service dns cannot be checked on IEPRDC011!
+        [!] Service netlogon cannot be checked on IEPRDC011!
+        [!] Service kdc cannot be checked on IEPRDC011!
+        [!] Service w32time cannot be checked on IEPRDC011!
+        [!] Service ntds cannot be checked on IEPRDC011!
+        [!] Service dfsr cannot be checked on IEPRDC011!
+        [!] Service dns cannot be checked on IEPRDC010!
+        [!] Service netlogon cannot be checked on IEPRDC010!
+        [!] Service kdc cannot be checked on IEPRDC010!
+        [!] Service w32time cannot be checked on IEPRDC010!
+        [!] Service ntds cannot be checked on IEPRDC010!
+        [!] Service dfsr cannot be checked on IEPRDC010!
+        [!] Service dns cannot be checked on IEPRDC012!
+        [!] Service netlogon cannot be checked on IEPRDC012!
+        [!] Service kdc cannot be checked on IEPRDC012!
+        [!] Service w32time cannot be checked on IEPRDC012!
+        [!] Service ntds cannot be checked on IEPRDC012!
+        [!] Service dfsr cannot be checked on IEPRDC012!
+        [!] Service dns cannot be checked on IEPRDC013!
+        [!] Service netlogon cannot be checked on IEPRDC013!
+        [!] Service kdc cannot be checked on IEPRDC013!
+        [!] Service w32time cannot be checked on IEPRDC013!
+        [!] Service ntds cannot be checked on IEPRDC013!
+        [!] Service dfsr cannot be checked on IEPRDC013!
+        [!] Service dns cannot be checked on USPRDC030!
+        [!] Service netlogon cannot be checked on USPRDC030!
+        [!] Service kdc cannot be checked on USPRDC030!
+        [!] Service w32time cannot be checked on USPRDC030!
+        [!] Service ntds cannot be checked on USPRDC030!
+        [!] Service dfsr cannot be checked on USPRDC030!
+        [!] Service dns cannot be checked on USPRDC031!
+        [!] Service netlogon cannot be checked on USPRDC031!
+        [!] Service kdc cannot be checked on USPRDC031!
+        [!] Service w32time cannot be checked on USPRDC031!
+        [!] Service ntds cannot be checked on USPRDC031!
+        [!] Service dfsr cannot be checked on USPRDC031!
+        [!] Service dns cannot be checked on USPRDC032!
+        [!] Service netlogon cannot be checked on USPRDC032!
+        [!] Service kdc cannot be checked on USPRDC032!
+        [!] Service w32time cannot be checked on USPRDC032!
+        [!] Service ntds cannot be checked on USPRDC032!
+        [!] Service dfsr cannot be checked on USPRDC032!
+        [!] Service dns cannot be checked on USPRDC033!
+        [!] Service netlogon cannot be checked on USPRDC033!
+        [!] Service kdc cannot be checked on USPRDC033!
+        [!] Service w32time cannot be checked on USPRDC033!
+        [!] Service ntds cannot be checked on USPRDC033!
+        [!] Service dfsr cannot be checked on USPRDC033!
+        [!] Service dns cannot be checked on USPRDC037!
+        [!] Service netlogon cannot be checked on USPRDC037!
+        [!] Service kdc cannot be checked on USPRDC037!
+        [!] Service w32time cannot be checked on USPRDC037!
+        [!] Service ntds cannot be checked on USPRDC037!
+        [!] Service dfsr cannot be checked on USPRDC037!
+        [!] Service dns cannot be checked on USPRDC034!
+        [!] Service netlogon cannot be checked on USPRDC034!
+        [!] Service kdc cannot be checked on USPRDC034!
+        [!] Service w32time cannot be checked on USPRDC034!
+        [!] Service ntds cannot be checked on USPRDC034!
+        [!] Service dfsr cannot be checked on USPRDC034!
+        [!] Service dns cannot be checked on USPRDC035!
+        [!] Service netlogon cannot be checked on USPRDC035!
+        [!] Service kdc cannot be checked on USPRDC035!
+        [!] Service w32time cannot be checked on USPRDC035!
+        [!] Service ntds cannot be checked on USPRDC035!
+        [!] Service dfsr cannot be checked on USPRDC035!
+        [!] Service dns cannot be checked on UKPRDC014!
+        [!] Service netlogon cannot be checked on UKPRDC014!
+        [!] Service kdc cannot be checked on UKPRDC014!
+        [!] Service w32time cannot be checked on UKPRDC014!
+        [!] Service ntds cannot be checked on UKPRDC014!
+        [!] Service dfsr cannot be checked on UKPRDC014!
+        [!] Service dns cannot be checked on SGPRDC002!
+        [!] Service netlogon cannot be checked on SGPRDC002!
+        [!] Service kdc cannot be checked on SGPRDC002!
+        [!] Service w32time cannot be checked on SGPRDC002!
+        [!] Service ntds cannot be checked on SGPRDC002!
+        [!] Service dfsr cannot be checked on SGPRDC002!
+        [!] Service dns cannot be checked on AZNEUDC001!
+        [!] Service netlogon cannot be checked on AZNEUDC001!
+        [!] Service kdc cannot be checked on AZNEUDC001!
+        [!] Service w32time cannot be checked on AZNEUDC001!
+        [!] Service ntds cannot be checked on AZNEUDC001!
+        [!] Service dfsr cannot be checked on AZNEUDC001!
+        [!] Service dns cannot be checked on AZCUSDC001!
+        [!] Service netlogon cannot be checked on AZCUSDC001!
+        [!] Service kdc cannot be checked on AZCUSDC001!
+        [!] Service w32time cannot be checked on AZCUSDC001!
+        [!] Service ntds cannot be checked on AZCUSDC001!
+        [!] Service dfsr cannot be checked on AZCUSDC001!
+        [!] Service dns cannot be checked on AZCUSDC002!
+        [!] Service netlogon cannot be checked on AZCUSDC002!
+        [!] Service kdc cannot be checked on AZCUSDC002!
+        [!] Service w32time cannot be checked on AZCUSDC002!
+        [!] Service ntds cannot be checked on AZCUSDC002!
+        [!] Service dfsr cannot be checked on AZCUSDC002!
+        [!] Service dns cannot be checked on AZEUS2DC001!
+        [!] Service netlogon cannot be checked on AZEUS2DC001!
+        [!] Service kdc cannot be checked on AZEUS2DC001!
+        [!] Service w32time cannot be checked on AZEUS2DC001!
+        [!] Service ntds cannot be checked on AZEUS2DC001!
+        [!] Service dfsr cannot be checked on AZEUS2DC001!
+        [!] Service dns cannot be checked on AZEUS2DC004!
+        [!] Service netlogon cannot be checked on AZEUS2DC004!
+        [!] Service kdc cannot be checked on AZEUS2DC004!
+        [!] Service w32time cannot be checked on AZEUS2DC004!
+        [!] Service ntds cannot be checked on AZEUS2DC004!
+        [!] Service dfsr cannot be checked on AZEUS2DC004!
+        [!] Service dns cannot be checked on AZEUS2DC002!
+        [!] Service netlogon cannot be checked on AZEUS2DC002!
+        [!] Service kdc cannot be checked on AZEUS2DC002!
+        [!] Service w32time cannot be checked on AZEUS2DC002!
+        [!] Service ntds cannot be checked on AZEUS2DC002!
+        [!] Service dfsr cannot be checked on AZEUS2DC002!
+        [!] Service dns cannot be checked on AZEUS2DC003!
+        [!] Service netlogon cannot be checked on AZEUS2DC003!
+        [!] Service kdc cannot be checked on AZEUS2DC003!
+        [!] Service w32time cannot be checked on AZEUS2DC003!
+        [!] Service ntds cannot be checked on AZEUS2DC003!
+        [!] Service dfsr cannot be checked on AZEUS2DC003!
+        [!] Service dns cannot be checked on AZWEUDC002!
+        [!] Service netlogon cannot be checked on AZWEUDC002!
+        [!] Service kdc cannot be checked on AZWEUDC002!
+        [!] Service w32time cannot be checked on AZWEUDC002!
+        [!] Service ntds cannot be checked on AZWEUDC002!
+        [!] Service dfsr cannot be checked on AZWEUDC002!
+        [!] Service dns cannot be checked on AZWEUDC003!
+        [!] Service netlogon cannot be checked on AZWEUDC003!
+        [!] Service kdc cannot be checked on AZWEUDC003!
+        [!] Service w32time cannot be checked on AZWEUDC003!
+        [!] Service ntds cannot be checked on AZWEUDC003!
+        [!] Service dfsr cannot be checked on AZWEUDC003!
+        [!] Service dns cannot be checked on AZWEUDC004!
+        [!] Service netlogon cannot be checked on AZWEUDC004!
+        [!] Service kdc cannot be checked on AZWEUDC004!
+        [!] Service w32time cannot be checked on AZWEUDC004!
+        [!] Service ntds cannot be checked on AZWEUDC004!
+        [!] Service dfsr cannot be checked on AZWEUDC004!
+        [!] Service dns cannot be checked on AZWEUDC001!
+        [!] Service netlogon cannot be checked on AZWEUDC001!
+        [!] Service kdc cannot be checked on AZWEUDC001!
+        [!] Service w32time cannot be checked on AZWEUDC001!
+        [!] Service ntds cannot be checked on AZWEUDC001!
+        [!] Service dfsr cannot be checked on AZWEUDC001!
+        [!] Service dns cannot be checked on AZNEUDC002!
+        [!] Service netlogon cannot be checked on AZNEUDC002!
+        [!] Service kdc cannot be checked on AZNEUDC002!
+        [!] Service w32time cannot be checked on AZNEUDC002!
+        [!] Service ntds cannot be checked on AZNEUDC002!
+        [!] Service dfsr cannot be checked on AZNEUDC002!
+        [!] Service dns cannot be checked on USPRDC036!
+        [!] Service netlogon cannot be checked on USPRDC036!
+        [!] Service kdc cannot be checked on USPRDC036!
+        [!] Service w32time cannot be checked on USPRDC036!
+        [!] Service ntds cannot be checked on USPRDC036!
+        [!] Service dfsr cannot be checked on USPRDC036!
+        [!] Service dns cannot be checked on USPRDC041!
+        [!] Service netlogon cannot be checked on USPRDC041!
+        [!] Service kdc cannot be checked on USPRDC041!
+        [!] Service w32time cannot be checked on USPRDC041!
+        [!] Service ntds cannot be checked on USPRDC041!
+        [!] Service dfsr cannot be checked on USPRDC041!
+        [!] Service dns cannot be checked on USPRDC038!
+        [!] Service netlogon cannot be checked on USPRDC038!
+        [!] Service kdc cannot be checked on USPRDC038!
+        [!] Service w32time cannot be checked on USPRDC038!
+        [!] Service ntds cannot be checked on USPRDC038!
+        [!] Service dfsr cannot be checked on USPRDC038!
+        [!] Service dns cannot be checked on USPRDC040!
+        [!] Service netlogon cannot be checked on USPRDC040!
+        [!] Service kdc cannot be checked on USPRDC040!
+        [!] Service w32time cannot be checked on USPRDC040!
+        [!] Service ntds cannot be checked on USPRDC040!
+        [!] Service dfsr cannot be checked on USPRDC040!
+        [!] Service dns cannot be checked on USPRDC039!
+        [!] Service netlogon cannot be checked on USPRDC039!
+        [!] Service kdc cannot be checked on USPRDC039!
+        [!] Service w32time cannot be checked on USPRDC039!
+        [!] Service ntds cannot be checked on USPRDC039!
+        [!] Service dfsr cannot be checked on USPRDC039!
+    [+] Checking for Read Only DCs
+[*] Domain Trust Audit
+[*] Accounts Audit
+    [!] 2642 inactive user accounts(180days), see accounts_inactive.txt (KB500)
+    [!] 13821 disabled user accounts, see accounts_disabled.txt (KB501)
+    [!] 1 locked user accounts, see accounts_locked.txt
+    [!] RestrictAnonymous is set to 0! (KB81)
+    [!] There are 79 accounts in privileged groups, see accounts_userPrivileged.txt (KB426)
+[*] Password Information Audit
+    [!] There are 4678 accounts that don't expire, see accounts_passdontexpire.txt (KB254)
+    [!] 8036 accounts with passwords older than 90days, see accounts_with_old_passwords.txt (KB550)
+    [!] krbtgt password not changed since 10/04/2024 14:15:34! (KB253)
+    [+] Checking default password policy
+    [!] Lockout threshold is less than 5, currently set to 3 (KB263)
+    [!] Minimum password length is less than 14, currently set to 8 (KB262)
+    [!] Passwords do not expire (KB254)
+    [-] Finished checking default password policy
+    [+] Checking fine-grained password policies if they exist
+    [-] Finished checking fine-grained password policy
+    [!] Password quality test done, see C:\Users\GrWay\OneDrive\OneDrive - Beazley Group\Documents\Scripts\Active Directory\ADAudit\EUDUBVDIDV638\password_quality.txt
+[*] Trying to save NTDS.dit, please wait...
+    [+] NTDS.dit, SYSTEM & SAM saved to output folder
+    [+] Use secretsdump.py -system registry/SYSTEM -ntds Active\ Directory/ntds.dit LOCAL -outputfile customer
+[*] Computer Objects Audit
+    [!] We found 186 machines running 2000/2003/XP/Vista/7/2008! see machines_old.txt (KB3/37/38/KB259)
+[*] GPO audit (and checking SYSVOL for passwords)
+    [+] GPO Report saved to GPOReport.html
+    [+] GPO Report saved to GPOReport.xml, now run Grouper offline using the following command (KB499)
+    [+]     PS>Import-Module Grouper.psm1 ; Invoke-AuditGPOReport -Path C:\GPOReport.xml -Level 3
+    [+] Inherited GPOs saved to ous_inheritedGPOs.txt
+    [!] cpassword found in file, copying to output folder (KB329)
+        \\BFL.LOCAL\SYSVOL\bfl.local\Policies\{05B79E93-69E0-44B3-9F6A-4CFF074BE27E}\Machine\Preferences\Groups\Groups.xml
+    [!] cpassword found in file, copying to output folder (KB329)
+        \\BFL.LOCAL\SYSVOL\bfl.local\Policies_old\270516\Policies\{05B79E93-69E0-44B3-9F6A-4CFF074BE27E}\Machine\Preferences\Groups\Groups.xml
+    [!] cpassword found in file, copying to output folder (KB329)
+        \\BFL.LOCAL\SYSVOL\bfl.local\Policies_old\270516\Policies\{57583677-DC27-4FFF-B2D4-C2A7F66BADAB}\Machine\Preferences\Groups\Groups.xml
+    [!] cpassword found in file, copying to output folder (KB329)
+        \\BFL.LOCAL\SYSVOL\bfl.local\Policies_old\270516\Policies\{5D349297-87DB-40F1-B7E1-FF7AB0522F73}\Machine\Preferences\Groups\Groups.xml
+    [!] cpassword found in file, copying to output folder (KB329)
+        \\BFL.LOCAL\SYSVOL\bfl.local\Policies_old\270516\Policies\{7CF6F697-AB99-49B9-A4B2-A5735CD5EC2E}\Machine\Preferences\Groups\Groups.xml
+    [!] GPO [Default Domain Controllers Policy] enabled DES_CBC_CRC for Kerberos!
+    [+] GPO [Default Domain Controllers Policy] allows [BFL\GHOST_ITDHA004] to join computers to domain
+    [+] GPO [Default Domain Controllers Policy] allows [BFL\GHOST_COMPAQ14] to join computers to domain
+    [+] GPO [Default Domain Controllers Policy] allows [BFL\Domain Admins] to join computers to domain
+    [+] GPO [Default Domain Controllers Policy] allows [NT AUTHORITY\Authenticated Users] to join computers to domain
+    [!] No GPO restricts Domain, Schema and Enterprise local logon across domain!!!
+    [!] No GPO restricts Domain, Schema and Enterprise RDP logon across domain!!!
+    [!] No GPO restricts Domain, Schema and Enterprise network logon across domain!!!
+    [+] NTLM authentication hardening implemented, but NTLM not denied
+        [-] LmCompatibilityLevel Send NTLMv2 response only
+[*] Check Generic Group AD Permissions
+    [!] Issue identified, see C:\Users\GrWay\OneDrive\OneDrive - Beazley Group\Documents\Scripts\Active Directory\ADAudit\EUDUBVDIDV638\ou_permissions.txt
+[*] Check For Existence of LAPS in domain
+    [+] LAPS Installed in domain
+    [!] LAPS PowerShell module is not installed, can't run LAPS checks on this DC
+[*] Check For Existence of Authentication Polices and Silos
+    [!] There were no AD Authentication Policies found in the domain
+    [!] There were no AD Authentication Policy Silos found in the domain
+[*] Check For Existence DNS Zones allowing insecure updates
+[*] Check For newly created users and groups
+    [!] 247 new users were created last 30 days, see C:\Users\GrWay\OneDrive\OneDrive - Beazley Group\Documents\Scripts\Active Directory\ADAudit\EUDUBVDIDV638\new_users.txt
+    [!] 82 new groups were created last 30 days, see C:\Users\GrWay\OneDrive\OneDrive - Beazley Group\Documents\Scripts\Active Directory\ADAudit\EUDUBVDIDV638\new_groups.txt
+[*] Check high value kerberoastable user accounts
+    [!] High value kerberoastable user: kvsvaultsvc in groups: Exchange Trusted Subsystem
+    [!] High value kerberoastable user: srv.AGPM.Prod in groups: Backup Operators
+[*] Check for accounts with kerberos pre-auth
+    [+] No ASREP Accounts
+[*] Check for dangerous ACL permissions on Computers, Users and Groups
+    [!] Issue identified, vulnerable ACL on User, see C:\Users\GrWay\OneDrive\OneDrive - Beazley Group\Documents\Scripts\Active Directory\ADAudit\EUDUBVDIDV638\dangerousACLUsers.txt
+[*] Check for ADCS Vulnerabilities
+    [+] ESC8 not vulnerable
+[*] Check for LDAP Security Issues
+    [!] Issue identified LDAP signing is not enabled on EUDUBVDIDV638, the registry key does not exist.
+    [!] Issue identified LDAPS is not configured on EUDUBVDIDV638, LDAPs certificates are not configured
+    [!] Issue identified LDAPS channel binding is not enabled on EUDUBVDIDV638, the registry key does not exist
+    [+] LDAP null session not allowed on server IEPRDC012.bfl.local:389
+[*] Script end time 05/02/2025 17:58:23
+ _____ ____     _____       _ _ _
+|  _  |    \   |  _  |_ _ _| |_| |_
+|     |  |  |  |     | | | . | |  _|
+|__|__|____/   |__|__|___|___|_|_|
+v6.0                  by phillips321
+
+[*] Script start time 06/16/2025 14:30:03
+[!] DSInternals module not installed, use -installdeps to force install
+[*] Lang specific variables
+    [+] Administrators               : Administrators
+    [+] Users                        : Users
+    [+] Domain Admins                : Domain Admins
+    [+] Domain Users                 : Domain Users
+    [+] Domain Controllers           : Domain Controllers
+    [+] Schema Admins                : Schema Admins
+    [+] Enterprise Admins            : Enterprise Admins
+    [+] Everyone                     : Everyone
+    [+] Entreprise Domain Controllers: NT AUTHORITY\ENTERPRISE DOMAIN CONTROLLERS
+    [+] Authenticated Users          : NT AUTHORITY\Authenticated Users
+    [+] System                       : NT AUTHORITY\SYSTEM
+    [+] Local Service                : NT AUTHORITY\LOCAL SERVICE
+[*] Installing optionnal features
+[*] Device Information
+    [+] Device Name:  EUDUBVDIDV638
+    [+] Domain Name:  BFL
+    [+] User Name  :  a1_wg7
+    [+] NT Version :  10
+    [+] IP Address :  10.183.122.21
+[*] Domain Audit
+    [+] Checking Windows Update
+        [+] Windows is up to date on UKPRDC011, last install: 05/23/2025 00:00:00
+        [+] Windows is up to date on UKPRDC012, last install: 05/23/2025 00:00:00
+        [+] Windows is up to date on UKPRDC013, last install: 05/23/2025 00:00:00
+        [+] Windows is up to date on IEPRDC010, last install: 05/23/2025 00:00:00
+        [+] Windows is up to date on IEPRDC011, last install: 05/23/2025 00:00:00
+        [+] Windows is up to date on IEPRDC012, last install: 05/23/2025 00:00:00
+        [+] Windows is up to date on IEPRDC013, last install: 06/11/2025 00:00:00
+        [+] Windows is up to date on USPRDC030, last install: 05/24/2025 00:00:00
+        [+] Windows is up to date on USPRDC031, last install: 05/24/2025 00:00:00
+        [+] Windows is up to date on USPRDC032, last install: 05/24/2025 00:00:00
+        [+] Windows is up to date on USPRDC033, last install: 05/24/2025 00:00:00
+        [+] Windows is up to date on USPRDC037, last install: 05/24/2025 00:00:00
+        [+] Windows is up to date on USPRDC034, last install: 05/24/2025 00:00:00
+        [+] Windows is up to date on USPRDC035, last install: 05/24/2025 00:00:00
+        [+] Windows is up to date on UKPRDC014, last install: 06/14/2025 00:00:00
+        [+] Windows is up to date on SGPRDC002, last install: 05/24/2025 00:00:00
+        [+] Windows is up to date on AZNEUDC001, last install: 06/13/2025 00:00:00
+        [+] Windows is up to date on AZCUSDC001, last install: 05/24/2025 00:00:00
+        [+] Windows is up to date on AZCUSDC002, last install: 05/24/2025 00:00:00
+        [+] Windows is up to date on AZEUS2DC001, last install: 05/24/2025 00:00:00
+        [+] Windows is up to date on AZEUS2DC004, last install: 05/24/2025 00:00:00
+        [+] Windows is up to date on AZEUS2DC002, last install: 05/24/2025 00:00:00
+        [+] Windows is up to date on AZEUS2DC003, last install: 05/24/2025 00:00:00
+        [+] Windows is up to date on AZWEUDC002, last install: 05/24/2025 00:00:00
+        [+] Windows is up to date on AZWEUDC003, last install: 05/24/2025 00:00:00
+        [+] Windows is up to date on AZWEUDC004, last install: 05/24/2025 00:00:00
+        [+] Windows is up to date on AZWEUDC001, last install: 05/24/2025 00:00:00
+        [+] Windows is up to date on AZNEUDC002, last install: 05/24/2025 00:00:00
+        [+] Windows is up to date on USPRDC036, last install: 05/24/2025 00:00:00
+        [+] Windows is up to date on USPRDC041, last install: 05/24/2025 00:00:00
+        [+] Windows is up to date on USPRDC038, last install: 05/24/2025 00:00:00
+        [+] Windows is up to date on USPRDC040, last install: 05/24/2025 00:00:00
+        [+] Windows is up to date on USPRDC039, last install: 05/24/2025 00:00:00
+    [!] Operating system differs across DCs!!!
+        [+] Domain controllers with WS 2016
+            [-] UKPRDC011 has Windows Server 2016 Standard
+            [-] UKPRDC012 has Windows Server 2016 Standard
+            [-] UKPRDC013 has Windows Server 2016 Standard
+            [-] IEPRDC010 has Windows Server 2016 Standard
+            [-] IEPRDC011 has Windows Server 2016 Standard
+            [-] IEPRDC012 has Windows Server 2016 Standard
+            [-] IEPRDC013 has Windows Server 2016 Standard
+            [-] USPRDC030 has Windows Server 2016 Standard
+            [-] USPRDC031 has Windows Server 2016 Standard
+            [-] USPRDC032 has Windows Server 2016 Standard
+            [-] USPRDC033 has Windows Server 2016 Standard
+            [-] USPRDC037 has Windows Server 2016 Standard
+            [-] USPRDC034 has Windows Server 2016 Standard
+            [-] USPRDC035 has Windows Server 2016 Standard
+            [-] UKPRDC014 has Windows Server 2016 Standard
+            [-] SGPRDC002 has Windows Server 2016 Standard
+            [-] AZNEUDC001 has Windows Server 2016 Datacenter
+            [-] AZCUSDC001 has Windows Server 2016 Datacenter
+            [-] AZCUSDC002 has Windows Server 2016 Datacenter
+            [-] AZEUS2DC001 has Windows Server 2016 Datacenter
+            [-] AZEUS2DC004 has Windows Server 2016 Datacenter
+            [-] AZEUS2DC002 has Windows Server 2016 Datacenter
+            [-] AZEUS2DC003 has Windows Server 2016 Datacenter
+            [-] AZWEUDC002 has Windows Server 2016 Datacenter
+            [-] AZWEUDC003 has Windows Server 2016 Datacenter
+            [-] AZWEUDC004 has Windows Server 2016 Datacenter
+            [-] AZWEUDC001 has Windows Server 2016 Datacenter
+            [-] AZNEUDC002 has Windows Server 2016 Datacenter
+            [-] USPRDC036 has Windows Server 2016 Standard
+            [-] USPRDC041 has Windows Server 2016 Standard
+            [-] USPRDC038 has Windows Server 2016 Standard
+            [-] USPRDC040 has Windows Server 2016 Standard
+            [-] USPRDC039 has Windows Server 2016 Standard
+    [+] All DCs have the same hotfix of []
+    [+] All DCs have the same Service Pack of []
+    [+] All DCs have the same OS Version of [10.0 (14393)]
+    [!] DC UKPRDC011.bfl.local holds all FSMO roles!
+    [!] You have DCs with RC4 or DES allowed for Kerberos!!!
+    [+] New joined computers are stored in OU=_Unmanaged,OU=Accounts Computer,DC=bfl,DC=local
+    [+] New users are stored in OU=_Unmanaged,OU=Accounts User,DC=bfl,DC=local
+    [+] Checking NTP configuration
+        [+] UKPRDC011 is syncing time from 10.183.73.24,0x8 
+        [+] UKPRDC012 is syncing time from UKPRDC011.bfl.local 
+        [+] UKPRDC013 is syncing time from UKPRDC011.bfl.local 
+        [+] IEPRDC010 is syncing time from UKPRDC011.bfl.local 
+        [+] IEPRDC011 is syncing time from UKPRDC011.bfl.local 
+        [+] IEPRDC012 is syncing time from UKPRDC011.bfl.local 
+        [+] IEPRDC013 is syncing time from UKPRDC011.bfl.local 
+        [+] USPRDC030 is syncing time from UKPRDC011.bfl.local 
+        [+] USPRDC031 is syncing time from UKPRDC011.bfl.local 
+        [+] USPRDC032 is syncing time from UKPRDC011.bfl.local 
+        [+] USPRDC033 is syncing time from UKPRDC011.bfl.local 
+        [+] USPRDC037 is syncing time from UKPRDC011.bfl.local 
+        [+] USPRDC034 is syncing time from UKPRDC011.bfl.local 
+        [+] USPRDC035 is syncing time from UKPRDC011.bfl.local 
+        [+] UKPRDC014 is syncing time from UKPRDC011.bfl.local 
+        [+] SGPRDC002 is syncing time from UKPRDC011.bfl.local 
+        [+] AZNEUDC001 is syncing time from VM IC Time Synchronization Provider
+        [+] AZCUSDC001 is syncing time from UKPRDC011.bfl.local 
+        [+] AZCUSDC002 is syncing time from UKPRDC011.bfl.local 
+        [+] AZEUS2DC001 is syncing time from UKPRDC011.bfl.local 
+        [+] AZEUS2DC004 is syncing time from UKPRDC011.bfl.local 
+        [+] AZEUS2DC002 is syncing time from UKPRDC011.bfl.local 
+        [+] AZEUS2DC003 is syncing time from UKPRDC011.bfl.local 
+        [+] AZWEUDC002 is syncing time from VM IC Time Synchronization Provider
+        [+] AZWEUDC003 is syncing time from VM IC Time Synchronization Provider
+        [+] AZWEUDC004 is syncing time from VM IC Time Synchronization Provider
+        [+] AZWEUDC001 is syncing time from VM IC Time Synchronization Provider
+        [+] AZNEUDC002 is syncing time from VM IC Time Synchronization Provider
+        [+] USPRDC036 is syncing time from UKPRDC011.bfl.local 
+        [+] USPRDC041 is syncing time from UKPRDC011.bfl.local 
+        [+] USPRDC038 is syncing time from UKPRDC011.bfl.local 
+        [+] USPRDC040 is syncing time from UKPRDC011.bfl.local 
+        [+] USPRDC039 is syncing time from UKPRDC011.bfl.local 
+    [!] Schema Admins not empty!!!
+    [!] Enterprise Admins not empty!!!
+    [!] Domain users can add 10 devices to the domain! (KB251)
+    [!] Excessive permissions in Default Domain Controllers Policy detected!
+    [!] SMBv1 is enabled! (KB290)
+    [!] DomainLevel is reduced for backwards compatibility to Windows2012R2Domain!
+    [!] ForestLevel is reduced for backwards compatibility to Windows2012R2Forest!
+    [!] We found 1 DCs not owned by Domains Admins group! see dcs_not_owned_by_da.txt
+    [+] DFSR mechanism is used to replicate across domain controllers.
+    [+] Checking SYSVOL and NETLOGON shares on all DCs
+    [+] Recycle Bin is enabled in the domain
+    [+] Checking services on all DCs
+    [+] Checking for Read Only DCs
+[*] Domain Trust Audit
+[*] Accounts Audit
+    [!] 2625 inactive user accounts(180days), see accounts_inactive.txt (KB500)
+    [!] 14022 disabled user accounts, see accounts_disabled.txt (KB501)
+    [!] 3 locked user accounts, see accounts_locked.txt
+    [!] RestrictAnonymous is set to 0! (KB81)
+    [!] There are 78 accounts in privileged groups, see accounts_userPrivileged.txt (KB426)
+[*] Password Information Audit
+    [!] There are 4612 accounts that don't expire, see accounts_passdontexpire.txt (KB254)
+    [!] 8080 accounts with passwords older than 90days, see accounts_with_old_passwords.txt (KB550)
+    [!] krbtgt password not changed since 10/04/2024 14:15:34! (KB253)
+    [+] Checking default password policy
+    [!] Lockout threshold is less than 5, currently set to 3 (KB263)
+    [!] Minimum password length is less than 14, currently set to 8 (KB262)
+    [!] Passwords do not expire (KB254)
+    [-] Finished checking default password policy
+    [+] Checking fine-grained password policies if they exist
+    [-] Finished checking fine-grained password policy
+[*] Trying to save NTDS.dit, please wait...
+    [+] NTDS.dit, SYSTEM & SAM saved to output folder
+    [+] Use secretsdump.py -system registry/SYSTEM -ntds Active\ Directory/ntds.dit LOCAL -outputfile customer
+[*] Computer Objects Audit
+    [!] We found 186 machines running 2000/2003/XP/Vista/7/2008! see machines_old.txt (KB3/37/38/KB259)
+[*] GPO audit (and checking SYSVOL for passwords)
+    [+] GPO Report saved to GPOReport.html
+    [+] GPO Report saved to GPOReport.xml, now run Grouper offline using the following command (KB499)
+    [+]     PS>Import-Module Grouper.psm1 ; Invoke-AuditGPOReport -Path C:\GPOReport.xml -Level 3
+    [+] Inherited GPOs saved to ous_inheritedGPOs.txt
+    [!] cpassword found in file, copying to output folder (KB329)
+        \\BFL.LOCAL\SYSVOL\bfl.local\Policies\{05B79E93-69E0-44B3-9F6A-4CFF074BE27E}\Machine\Preferences\Groups\Groups.xml
+    [!] cpassword found in file, copying to output folder (KB329)
+        \\BFL.LOCAL\SYSVOL\bfl.local\Policies_old\270516\Policies\{05B79E93-69E0-44B3-9F6A-4CFF074BE27E}\Machine\Preferences\Groups\Groups.xml
+    [!] cpassword found in file, copying to output folder (KB329)
+        \\BFL.LOCAL\SYSVOL\bfl.local\Policies_old\270516\Policies\{57583677-DC27-4FFF-B2D4-C2A7F66BADAB}\Machine\Preferences\Groups\Groups.xml
+    [!] cpassword found in file, copying to output folder (KB329)
+        \\BFL.LOCAL\SYSVOL\bfl.local\Policies_old\270516\Policies\{5D349297-87DB-40F1-B7E1-FF7AB0522F73}\Machine\Preferences\Groups\Groups.xml
+    [!] cpassword found in file, copying to output folder (KB329)
+        \\BFL.LOCAL\SYSVOL\bfl.local\Policies_old\270516\Policies\{7CF6F697-AB99-49B9-A4B2-A5735CD5EC2E}\Machine\Preferences\Groups\Groups.xml
+    [!] GPO [Default Domain Controllers Policy] enabled DES_CBC_CRC for Kerberos!
+    [+] GPO [Default Domain Controllers Policy] allows [BFL\GHOST_ITDHA004] to join computers to domain
+    [+] GPO [Default Domain Controllers Policy] allows [BFL\GHOST_COMPAQ14] to join computers to domain
+    [+] GPO [Default Domain Controllers Policy] allows [BFL\Domain Admins] to join computers to domain
+    [+] GPO [Default Domain Controllers Policy] allows [NT AUTHORITY\Authenticated Users] to join computers to domain
+    [!] No GPO restricts Domain, Schema and Enterprise local logon across domain!!!
+    [!] No GPO restricts Domain, Schema and Enterprise RDP logon across domain!!!
+    [!] No GPO restricts Domain, Schema and Enterprise network logon across domain!!!
+    [+] NTLM authentication hardening implemented, but NTLM not denied
+        [-] LmCompatibilityLevel Send NTLMv2 response only
+[*] Check Generic Group AD Permissions
+    [!] Issue identified, see C:\Users\GrWay\OneDrive\OneDrive - Beazley Group\Documents\Scripts\Active Directory\ADAudit\EUDUBVDIDV638\ou_permissions.txt
+[*] Check For Existence of LAPS in domain
+    [!] LAPS Not Installed in domain (KB258)
+    [!] LAPS PowerShell module is not installed, can't run LAPS checks on this DC
+[*] Check For Existence of Authentication Polices and Silos
+    [!] There were no AD Authentication Policies found in the domain
+    [!] There were no AD Authentication Policy Silos found in the domain
+[*] Check For Existence DNS Zones allowing insecure updates
+[*] Check For newly created users and groups
+[*] Check high value kerberoastable user accounts
+[*] Check for accounts with kerberos pre-auth
+    [+] No ASREP Accounts
+[*] Check for dangerous ACL permissions on Computers, Users and Groups
+[*] Check for ADCS Vulnerabilities
+    [+] ESC8 not vulnerable
+[*] Check for LDAP Security Issues
+    [!] Issue identified LDAP signing is not enabled on EUDUBVDIDV638, the registry key does not exist.
+    [!] Issue identified LDAPS is not configured on EUDUBVDIDV638, LDAPs certificates are not configured
+    [!] Issue identified LDAPS channel binding is not enabled on EUDUBVDIDV638, the registry key does not exist
+    [+] LDAP null session not allowed on server :389
+[*] Script end time 06/16/2025 16:14:30

@@ -1,0 +1,6 @@
+LDAP signing is not enabled on EUDUBVDIDV638, the registry key does not exist
+LDAPS is not configured on EUDUBVDIDV638, LDAPs certificates are not configured
+LDAPS channel binding is not enabled on EUDUBVDIDV638, the registry key does not exist
+LDAP signing is not enabled on EUDUBVDIDV638, the registry key does not exist
+LDAPS is not configured on EUDUBVDIDV638, LDAPs certificates are not configured
+LDAPS channel binding is not enabled on EUDUBVDIDV638, the registry key does not exist

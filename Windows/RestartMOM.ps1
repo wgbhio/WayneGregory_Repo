@@ -1,6 +1,6 @@
 # Define target servers
 $servers = @(
-    "UKPRDB101.bfl.local"
+    "IEPRDB002.bfl.local"
 )
 
 # Define the service name

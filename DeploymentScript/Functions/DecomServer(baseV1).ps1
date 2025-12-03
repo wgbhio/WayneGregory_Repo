@@ -118,14 +118,36 @@ function Invoke-Remote {
 }
 
 # ========== AD / DNS / SCOM WRAPPERS ==========
-function Invoke-ADQuery([string]$Hostname) {
-    $sb = {
-        param($HostToFind)
-        Import-Module ActiveDirectory -ErrorAction Stop
-        try { Get-ADComputer -Identity $HostToFind -Properties OperatingSystem,DNSHostName,DistinguishedName -ErrorAction Stop } catch { $null }
+function Invoke-ADQuery {
+    param(
+        [Parameter(Mandatory = $true)]
+        [string]$Hostname
+    )
+
+    Import-Module ActiveDirectory -ErrorAction Stop
+
+    $c = $null
+
+    # 1) Try direct identity (covers DN, GUID, sAMAccountName if exact)
+    try {
+        $c = Get-ADComputer -Identity $Hostname `
+                            -Properties OperatingSystem, DNSHostName, DistinguishedName `
+                            -ErrorAction Stop
+    } catch {
+        # 2) Fallback – same pattern as your other AD logic:
+        #    - sAMAccountName = Hostname$
+        #    - or CN = Hostname
+        $name    = $Hostname
+        $samName = ($name -notmatch '\$$') ? "$name$" : $name
+
+        $c = Get-ADComputer -LDAPFilter "(|(sAMAccountName=$samName)(cn=$name))" `
+                            -Properties OperatingSystem, DNSHostName, DistinguishedName `
+                            -ErrorAction SilentlyContinue
     }
-    Invoke-Remote -ComputerName $InfraHop -ScriptBlock $sb -ArgumentList @($Hostname)
+
+    if ($c) { $c } else { $null }
 }
+
 
 function Invoke-ADResolveComputerDN {
     param([Parameter(Mandatory=$true)][string]$ComputerIdentityOrName)
@@ -149,12 +171,16 @@ function Invoke-ADResolveComputerDN {
 }
 
 function Invoke-ADGetWUGroups {
-    param([Parameter(Mandatory=$true)][string]$ComputerIdentityOrDN)
+    param(
+        [Parameter(Mandatory = $true)]
+        [string]$ComputerIdentityOrDN
+    )
+
     $sb = {
         param($compIdOrDn, $excGroupName)
         Import-Module ActiveDirectory -ErrorAction Stop
 
-        # Resolve the computer and get its DN
+        # -------- Resolve the computer DN (same as before) --------
         $comp = $null
         try {
             $comp = Get-ADComputer -Identity $compIdOrDn -Properties DistinguishedName -ErrorAction Stop
@@ -163,43 +189,58 @@ function Invoke-ADGetWUGroups {
             $samName = ($name -notmatch '\$$') ? "$name$" : $name
             $comp = Get-ADComputer -LDAPFilter "(|(sAMAccountName=$samName)(cn=$name))" -Properties DistinguishedName -ErrorAction Stop
         }
+
         if (-not $comp) { return @() }
         $targetDN = $comp.DistinguishedName
 
-        # Determine search base automatically from RootDSE
+        # -------- Working WU logic (from PatchingReport.ps1 style) --------
         $searchBase = (Get-ADRootDSE).DefaultNamingContext
+        $wuPattern  = "*app.WindowsUpdate*"
 
-        # Pull all *app.WindowsUpdate* groups and the Exception group (by name)
-        $wuGroups = Get-ADGroup -Filter "Name -like '*app.WindowsUpdate*'" -SearchBase $searchBase -Properties DistinguishedName, Name
+        # All *app.WindowsUpdate* groups under the domain
+        $wuGroups = Get-ADGroup -Filter "Name -like '$wuPattern'" `
+                                -SearchBase $searchBase `
+                                -Properties DistinguishedName, Name
+
+        # Exception group by name
         $excGroup = $null
         if ($excGroupName) {
-            $excGroup = Get-ADGroup -Filter "Name -eq '$excGroupName'" -SearchBase $searchBase -Properties DistinguishedName, Name
+            $excGroup = Get-ADGroup -Filter "Name -eq '$excGroupName'" `
+                                    -SearchBase $searchBase `
+                                    -Properties DistinguishedName, Name
         }
         $excDN = if ($excGroup) { $excGroup.DistinguishedName } else { $null }
 
-        $matched = New-Object System.Collections.Generic.List[Object]
+        # Build list of groups this computer is in
+        $matched = New-Object System.Collections.Generic.List[object]
+
         foreach ($g in $wuGroups) {
+            $gName = $g.Name
+            $gDN   = $g.DistinguishedName
             try {
-                $members = Get-ADGroupMember -Identity $g.DistinguishedName -Recursive -ErrorAction Stop |
-                           Where-Object { $_.objectClass -eq 'computer' }
-                foreach ($m in $members) {
-                    if ($m.distinguishedName -eq $targetDN) {
-                        $isException = ($excDN -and $g.DistinguishedName -eq $excDN)
-                        # Always log membership; only return non-exception groups for removal checks
-                        if ($isException) {
-                            Write-Output ([PSCustomObject]@{ Name=$g.Name; DistinguishedName=$g.DistinguishedName; IsException=$true }) | Out-Null
-                        } else {
-                            $matched.Add([PSCustomObject]@{ Name=$g.Name; DistinguishedName=$g.DistinguishedName; IsException=$false })
+                Get-ADGroupMember -Identity $gDN -Recursive -ErrorAction Stop |
+                    Where-Object { $_.objectClass -eq 'computer' } |
+                    ForEach-Object {
+                        if ($_.distinguishedName -eq $targetDN) {
+                            $isExc = ($excDN -and $gDN -eq $excDN)
+                            $matched.Add([PSCustomObject]@{
+                                Name              = $gName
+                                DistinguishedName = $gDN
+                                IsException       = $isExc
+                            }) | Out-Null
                         }
-                        break
                     }
-                }
-            } catch { Write-Verbose "Failed expanding members of group '${($g.Name)}': $_" }
+            } catch {
+                Write-Verbose "Failed expanding members of group '$gName': $_"
+            }
         }
+
         return $matched
     }
+
     Invoke-Remote -ComputerName $InfraHop -ScriptBlock $sb -ArgumentList @($ComputerIdentityOrDN, $WUExceptionGroupName)
 }
+
 
 function Invoke-ADRemoveFromGroup {
     param(

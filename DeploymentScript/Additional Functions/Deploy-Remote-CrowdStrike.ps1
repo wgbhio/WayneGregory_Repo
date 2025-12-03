@@ -5,7 +5,7 @@
 # ============================
 
 $Servers = @(
-   'UKPRDB214'
+   'UKPRDB214','UKPRAP360'
       ) | Select-Object -Unique
 
 # --- Local source paths on YOUR admin machine ---

@@ -15,7 +15,7 @@ Key traits preserved (Baseline V2):
 - AD move runs last, no replication call
 - Content Library refresh then deploy
 - Round-robin additional data disks across PVSCSI 1–3
-- Defaults: ToolsWaitSeconds=90, PostPowerOnDelay=15, AD.WaitForSeconds=180
+- Defaults: ToolsWaitSeconds=60, PostPowerOnDelay=15, AD.WaitForSeconds=60
 - Root folders: Templates / Production / Development
 - Notes minimal: "CR: {CR} — deployed {TS}"
 ====================================================================== #>
@@ -32,6 +32,45 @@ $global:__hasContentModule = TryImport-Module -Name 'VMware.VimAutomation.Conten
 
 # --- Utilities -------------------------------------------------------------
 function Write-Stamp { param([string]$msg) Write-Host ("[{0}] {1}" -f (Get-Date -Format 'yyyy-MM-dd HH:mm:ss'), $msg) }
+
+function Test-WSManWithRetry {
+  [CmdletBinding()]
+  param(
+    [Parameter(Mandatory)][string]$ComputerName,
+    [int]$TimeoutSeconds = 240,
+    [int]$IntervalSeconds = 20,
+
+    # NEW: optionally flush local DNS cache between retries
+    [switch]$FlushDnsOnRetry
+  )
+
+  $deadline = (Get-Date).AddSeconds($TimeoutSeconds)
+  do {
+    try {
+      if (Test-WSMan -ComputerName $ComputerName -ErrorAction SilentlyContinue) {
+        Write-Stamp ("[WinRM] {0}: online." -f $ComputerName)
+        return $true
+      }
+    } catch {}
+
+    # NEW: flush DNS locally if requested
+    if ($FlushDnsOnRetry) {
+      try {
+        Write-Stamp ("[WinRM] {0}: flushing local DNS cache (ipconfig /flushdns)..." -f $ComputerName)
+        & ipconfig /flushdns | Out-Null
+      } catch {
+        Write-Stamp ("[WinRM] {0}: DNS flush failed: {1}" -f $ComputerName,$_.Exception.Message)
+      }
+    }
+
+    Write-Stamp ("[WinRM] {0}: not reachable yet, retrying in {1}s…" -f $ComputerName,$IntervalSeconds)
+    Start-Sleep -Seconds $IntervalSeconds
+  } while ((Get-Date) -lt $deadline)
+
+  Write-Stamp ("[WinRM] {0}: unreachable after {1}s." -f $ComputerName,$TimeoutSeconds)
+  return $false
+}
+
 
 function Invoke-Step {
   param([Parameter(Mandatory)][string]$Name, [Parameter(Mandatory)][scriptblock]$Script)
@@ -206,7 +245,7 @@ function Wait-ToolsHealthy {
   return $null
 }
 function Invoke-FinalizeVm {
-  param([Parameter(Mandatory)]$VM,[int]$ToolsWaitSeconds = 180)
+  param([Parameter(Mandatory)]$VM,[int]$ToolsWaitSeconds = 60)
   if ($ToolsWaitSeconds -lt 30) { $ToolsWaitSeconds = 30 }
   Write-Stamp "Finalize: enforcing Tools policy, rebooting, upgrading HW, and revalidating Tools…"
 
@@ -249,8 +288,20 @@ function Invoke-FinalizeVm {
 function Convert-StructuredConfig {
   param([Parameter(Mandatory)]$In)
 
-  function Pick { param([object[]]$v) foreach($x in $v){ if($null -ne $x -and "" -ne "$x"){ return $x } } $null }
-  function Get-Prop($obj, $name) { if ($null -eq $obj) { return $null }; ($obj.PSObject.Properties[$name])?.Value }
+  function Pick {
+    param([object[]]$v)
+    foreach ($x in $v) {
+      if ($null -ne $x -and "" -ne "$x") { return $x }
+    }
+    $null
+  }
+
+  function Get-Prop($obj, $name) {
+    if ($null -eq $obj) { return $null }
+    $p = $obj.PSObject.Properties[$name]
+    if ($null -ne $p) { return $p.Value }
+    return $null
+  }
 
   if ($In -and $In.PSObject.Properties['VMware']) { $vmw=$In.VMware } else { $vmw=$In }
   $ad=$In.AD; $opt=$In.Options; $cl=$vmw.ContentLibrary; $hw=$vmw.Hardware
@@ -278,8 +329,8 @@ function Convert-StructuredConfig {
     CoresPerSocket     = Get-Prop $hw 'CoresPerSocket'
     ADTargetOU         = Get-Prop $ad 'TargetOU'
     ADServer           = Get-Prop $ad 'Server'
-    ADUseVCenterCreds  = Pick @((Get-Prop $ad 'UseVCenterCreds'), $true)
-    ADWaitForSeconds   = Pick @((Get-Prop $ad 'WaitForSeconds'), 180)
+    ADUseVCenterCreds  = Pick @((Get-Prop $ad 'UseVCenterCreds'), $false)
+    ADWaitForSeconds   = Pick @((Get-Prop $ad 'WaitForSeconds'), 60)
     ADCredFile         = Get-Prop $ad 'CredFile'
     PowerOn            = Pick @((Get-Prop $opt 'PowerOn'), $true)
     EnsureNICConnected = Pick @((Get-Prop $opt 'EnsureNICConnected'), $true)
@@ -310,12 +361,14 @@ function Convert-StructuredConfig {
 
     $siteSuffix = $region
     if ($region -eq 'UK') {
-      if ($out.Cluster -match 'LD9') { $siteSuffix = 'LD9' } elseif ($out.Cluster -match 'MAR') { $siteSuffix = 'MAR' } elseif ($out.Cluster -match 'HAW') { $siteSuffix = 'HAW' } else { $siteSuffix = 'UK' }
+      if ($out.Cluster -match 'LD9') { $siteSuffix = 'LD9' }
+      else { $siteSuffix = 'UK' }
     } elseif ($region -eq 'IE') {
       $siteSuffix = 'DB4'
     } elseif ($region -eq 'US') {
       if ($usSite) { $siteSuffix = $usSite } else { $siteSuffix = 'US' }
     }
+
 
     $out.LocalTemplateName = ('{0}_{1}' -f $out.TemplateName, $siteSuffix)
 
@@ -329,7 +382,7 @@ function Convert-StructuredConfig {
       if (-not $out.Cluster) {
         if     ($usSite -eq 'HAW')     { $out.Cluster = 'HAW-Local' }
         elseif ($usSite -eq 'MAR')     { $out.Cluster = 'MAR-Local' }
-        elseif ($usSite -eq 'COMPUTE') { $out.Cluster = 'COMPUTE-Local' }
+        elseif ($usSite -eq 'COMPUTE') { $out.Cluster = 'COMPUTE' }
       }
     }
   }
@@ -536,7 +589,11 @@ function Invoke-ApplyCohesityZertoTags {
     $h = @{}
     foreach($t in $TagNames){
       $tagObj = Get-Tag -Server $Server -Category $Category -Name $t -ErrorAction SilentlyContinue
-      $h[$t] = if ($tagObj) { (Get-VM -Server $Server -Tag $tagObj -ErrorAction SilentlyContinue | Measure-Object).Count } else { 0 }
+      if ($tagObj) {
+        $h[$t] = (Get-VM -Server $Server -Tag $tagObj -ErrorAction SilentlyContinue | Measure-Object).Count
+      } else {
+        $h[$t] = 0
+      }
     }
     $h
   }
@@ -558,14 +615,22 @@ function Invoke-ApplyCohesityZertoTags {
 
     if ($existingAny) {
       if ($existingAny.Tag.Name -eq $TagName) {
-        return [pscustomobject]@{Succeeded=$false; Action='NoChange'; OldTag=$existingAny.Tag.Name}
+        return [pscustomobject]@{
+          Succeeded = $false
+          Action    = 'NoChange'
+          OldTag    = $existingAny.Tag.Name
+        }
       }
       if ($Rebalance) {
         $existingAny | ForEach-Object {
           Remove-TagAssignment -TagAssignment $_ -Confirm:$false -ErrorAction SilentlyContinue
         }
       } else {
-        return [pscustomobject]@{Succeeded=$false; Action='SkipExisting'; OldTag=$existingAny.Tag.Name}
+        return [pscustomobject]@{
+          Succeeded = $false
+          Action    = 'SkipExisting'
+          OldTag    = $existingAny.Tag.Name
+        }
       }
     }
 
@@ -575,16 +640,22 @@ function Invoke-ApplyCohesityZertoTags {
       [pscustomobject]@{
         Succeeded = $true
         Action    = if ($existingAny) { 'Replaced' } else { 'Assigned' }
-        OldTag    = $existingAny?.Tag?.Name
+        OldTag    = if ($existingAny -and $existingAny.Tag) { $existingAny.Tag.Name } else { $null }
       }
     } catch {
-      [pscustomobject]@{Succeeded=$false; Action='Failed'; OldTag=$null; Error=$_.Exception.Message}
+      [pscustomobject]@{
+        Succeeded = $false
+        Action    = 'Failed'
+        OldTag    = $null
+        Error     = $_.Exception.Message
+      }
     }
   }
 
   function Get-VM-SiteForZerto([object]$VM,[string]$Region,[object]$Server){
     $cluster = Get-Cluster -Server $Server -VM $VM -ErrorAction SilentlyContinue
-    $cn = $cluster?.Name
+    $cn = if ($cluster) { $cluster.Name } else { $null }
+
     if ($cn) {
       if ($cn -match '(?i)\bLD9\b|London|LD-?9|LDN9') { return 'LD9' }
       if ($cn -match '(?i)\bDB4\b|Dublin|DB-?4')     { return 'DB4' }
@@ -592,7 +663,7 @@ function Invoke-ApplyCohesityZertoTags {
     switch -Regex ($Region) {
       '^UK$' { 'LD9' }
       '^IE$' { 'DB4' }
-      '^US$' { 'US' }
+      '^US$' { 'US'  }
       default { $null }
     }
   }
@@ -608,8 +679,9 @@ function Invoke-ApplyCohesityZertoTags {
   Ensure-TagCategory $ZertoCategoryName 'Single' @('VirtualMachine') -Server $Server
   Ensure-Tags $ZertoCategoryName @($ZertoTag_DB4_to_LD9,$ZertoTag_LD9_to_DB4) -Server $Server
 
-  if ($VM.Name -match 'DV') {
-    Write-Stamp "[Tags] Cohesity: skipped (name contains 'DV')."
+  # Cohesity: skip only if VM name starts with "DV"
+  if ($VM.Name.ToUpper().StartsWith('DV')) {
+    Write-Stamp "[Tags] Cohesity: skipped (name starts with 'DV')."
   } else {
     $counts = Get-TagCounts $CohesityCategoryName $CohesityTags -Server $Server
     $chosen = Choose-LeastLoadedTag $counts $CohesityTags
@@ -633,91 +705,91 @@ function Invoke-ApplyCohesityZertoTags {
   }
 }
 
+
 # --- AD Join + OU Move (Windows guests) ------------------------------------
 function Invoke-ADPlacement {
   [CmdletBinding()]
   param(
-    [Parameter(Mandatory)][VMware.VimAutomation.ViCore.Types.V1.Inventory.VirtualMachine]$VM,
+    [Parameter(Mandatory)]
+    [VMware.VimAutomation.ViCore.Types.V1.Inventory.VirtualMachine]$VM,
+
     [Parameter()][string]$TargetOU,
     [Parameter()][string]$ADServer,
+
+    # Kept so the call-site stays the same, but we won't prompt here
     [Parameter()][switch]$UseVCenterCreds,
     [Parameter()][string]$ADCredFile,
-    [Parameter()][int]$WaitForSeconds = 180,
-    [Parameter()][pscredential]$DomainCredential  # <-- NEW: vCenter creds passed in
+
+    [Parameter()][int]$WaitForSeconds = 60,
+
+    # Passed in from Deploy-FromCLv2 (same creds you used for vCenter)
+    [Parameter()][pscredential]$DomainCredential
   )
+
   try {
-    Write-Stamp ("[AD] Evaluating placement for '{0}'…" -f $VM.Name)
-    $guest = Get-VMGuest -VM $VM -ErrorAction SilentlyContinue
-    if (-not $guest -or -not ($guest.OSFullName -match 'Windows')) {
-      Write-Stamp "[AD] Skipping: non-Windows or no guest info."
+    Write-Stamp ("[AD] OU placement for '{0}'…" -f $VM.Name)
+
+    if (-not $TargetOU) {
+      Write-Stamp "[AD] No target OU specified; nothing to do."
       return
     }
 
-    # ---------- CREDENTIALS (no prompts) ----------
+    # Decide which creds to use (no prompts here)
     $creds = $null
     if ($UseVCenterCreds -and $DomainCredential) {
-      $creds = $DomainCredential     # reuse the vCenter login creds
+      $creds = $DomainCredential           # reuse vCenter creds (domain admin)
     } elseif ($ADCredFile -and (Test-Path $ADCredFile)) {
       try { $creds = Import-Clixml -Path $ADCredFile } catch {}
     }
 
-    # If nothing supplied and we don't want prompts, exit cleanly
     if (-not $creds) {
-      Write-Warning "[AD] No credentials available (vCenter or CredFile). Skipping AD join/move."
+      Write-Warning "[AD] No credentials available (vCenter or CredFile). Skipping OU move."
       return
     }
-    # ---------------------------------------------
 
-    $sess = $null
+    # Give AD/DNS a little time after customization join
+    if ($WaitForSeconds -gt 0) {
+      Write-Stamp ("[AD] Waiting {0}s for AD object to appear…" -f $WaitForSeconds)
+      Start-Sleep -Seconds $WaitForSeconds
+    }
+
+    # OU move from the management host (requires RSAT ActiveDirectory)
     try {
-      # Prefer PS Direct if available; falls back to WinRM with creds
-      $sess = New-PSSession -VM $VM -ErrorAction Stop
+      Import-Module ActiveDirectory -ErrorAction Stop
+
+      $getParams = @{
+        Identity    = $VM.Name
+        ErrorAction = 'Stop'
+      }
+      if ($ADServer)     { $getParams['Server']     = $ADServer }
+      if ($creds)        { $getParams['Credential'] = $creds }
+
+      $comp = Get-ADComputer @getParams
+      $currentDN = $comp.DistinguishedName
+
+      if ($currentDN -notmatch [regex]::Escape($TargetOU)) {
+        $moveParams = @{
+          Identity    = $comp.DistinguishedName
+          TargetPath  = $TargetOU
+          Confirm     = $false
+          ErrorAction = 'Stop'
+        }
+        if ($ADServer) { $moveParams['Server']     = $ADServer }
+        if ($creds)    { $moveParams['Credential'] = $creds }
+
+        Move-ADObject @moveParams
+        Write-Stamp ("[AD] Moved computer '{0}' to '{1}'." -f $VM.Name,$TargetOU)
+      } else {
+        Write-Stamp "[AD] Already in target OU."
+      }
     } catch {
-      try { $sess = New-PSSession -ComputerName $VM.Name -Credential $creds -ErrorAction Stop }
-      catch { Write-Warning "[AD] Cannot open session to $($VM.Name): $($_.Exception.Message)"; return }
+      Write-Warning ("[AD] OU move failed: {0}" -f $_.Exception.Message)
     }
 
-    Invoke-Command -Session $sess -ScriptBlock {
-      param($domain,$ou,$adServer,$credsUser,$credsPwd)
-      function Get-DomainJoined { try { (Get-WmiObject Win32_ComputerSystem).PartOfDomain } catch { $false } }
-      $needJoin = -not (Get-DomainJoined)
-      if ($needJoin) {
-        try {
-          $sec = ConvertTo-SecureString -String $credsPwd -AsPlainText -Force
-          $c  = New-Object System.Management.Automation.PSCredential($credsUser,$sec)
-          Add-Computer -DomainName $domain -OUPath $ou -Credential $c -Server $adServer -ErrorAction Stop
-          Restart-Computer -Force
-        } catch {
-          $_
-        }
-      }
-    } -ArgumentList ("bfl.local"), $TargetOU, $ADServer, $creds.UserName, ($creds.GetNetworkCredential().Password)
-
-    Start-Sleep -Seconds $WaitForSeconds
-
-    if ($TargetOU) {
-      try {
-        Import-Module ActiveDirectory -ErrorAction Stop
-        $comp = Get-ADComputer -Identity $VM.Name -Server $ADServer -ErrorAction Stop
-        $currentDN = $comp.DistinguishedName
-        if ($currentDN -notmatch [regex]::Escape($TargetOU)) {
-          Move-ADObject -Identity $comp.DistinguishedName -TargetPath $TargetOU -Confirm:$false -ErrorAction Stop
-          Write-Stamp "[AD] Moved computer '$($VM.Name)' to '$TargetOU'."
-        } else {
-          Write-Stamp "[AD] Already in target OU."
-        }
-      } catch {
-        Write-Warning ("[AD] Placement step failed: {0}" -f $_.Exception.Message)
-      }
-    } else {
-      Write-Stamp "[AD] No target OU provided; join-only if needed."
-    }
   } catch {
     Write-Warning ("[AD] Unexpected error: {0}" -f $_.Exception.Message)
   }
 }
-
-
 
 # --- Post: CrowdStrike + SCOM installer ------------------------------------
 
@@ -843,7 +915,7 @@ function Install-CS-And-SCOM-IfNeeded {
   param(
     [Parameter(Mandatory)][VMware.VimAutomation.ViCore.Types.V1.Inventory.VirtualMachine]$VM,
 
-    # CrowdStrike bits (unchanged)
+    # CrowdStrike bits
     [Parameter()][string]$LocalCS = "C:\Beazley\Software\Crowdstrike\FalconSensor_Windows.exe",
     [Parameter()][string]$CS_CID = "ADB1C14C8F2B4BF6BAAE8ACC90511E6C-71",
 
@@ -859,13 +931,19 @@ function Install-CS-And-SCOM-IfNeeded {
     $isPR   = ($VM.Name -match 'PR')     # Only PR servers get SCOM
     $target = $VM.Name
 
-    # --- Basic WSMan connectivity check to the guest for CS part ------------
+    # Wait for WinRM before attempting installers (retry helper)
     $wsok = $false
-    try { $wsok = [bool](Test-WSMan -ComputerName $target -ErrorAction SilentlyContinue) } catch {}
+    try {
+      $wsok = Test-WSManWithRetry -ComputerName $target `
+                            -TimeoutSeconds 600 `
+                            -IntervalSeconds 20 `
+                            -FlushDnsOnRetry
+    } catch {}
     if (-not $wsok) {
-      Write-Stamp ("[Installers] {0}: WSMan unreachable, skipping installers." -f $target)
+      Write-Stamp ("[Installers] {0}: WinRM unreachable after retries, skipping installers." -f $target)
       return
     }
+
 
     if (-not $Credential) {
       $Credential = Get-Credential -Message "[Installers] Creds for $target"
@@ -924,7 +1002,6 @@ function Install-CS-And-SCOM-IfNeeded {
     # ------------------------- SCOM via PUSH from SCOM server ---------------
     if ($isPR) {
       if (-not $script:ScomCredential) {
-        # Reuse the server name from the parameter if you want, but we also have $script:ScomMgmtServer
         $script:ScomMgmtServer = $SCOM_MGMT_SVR
         $script:ScomCredential = Get-Credential -Message ("[Installers] Creds for SCOM server {0}" -f $script:ScomMgmtServer)
       }
@@ -944,6 +1021,7 @@ function Install-CS-And-SCOM-IfNeeded {
     Write-Warning ("[Installers] {0}: {1}" -f $VM.Name,$_.Exception.Message)
   }
 }
+
 
 # --- Disk helpers: PVSCSI + Round Robin ------------------------------------
 function Ensure-PvScsiControllers {
@@ -1085,6 +1163,7 @@ function Remove-VMAndAD {
 }
 
 # --- Builder (interactive) --------------------------------------------------
+
 function Build-DeployConfig {
 
   $RegionToVCSA = @{ 'UK'='ukprim098.bfl.local'; 'US'='usprim004.bfl.local'; 'IE'='ieprim018.bfl.local' }
@@ -1100,7 +1179,7 @@ function Build-DeployConfig {
     @{ Name='US Stretched'; Cluster='Compute';       DSCluster='PROD_POD_CLUSTER'; Site=$null },
     @{ Name='US HAW';       Cluster='HAW-Local';     DSCluster='HAW_LOCAL_CLUSTER'; Site='HAW'  },
     @{ Name='US MAR';       Cluster='MAR-Local';     DSCluster='MAR_LOCAL_CLUSTER'; Site='MAR'  },
-    @{ Name='US COMPUTE';   Cluster='COMPUTE-Local'; DSCluster='DEV_POD_CLUSTER';   Site='COMPUTE' }
+    @{ Name='US COMPUTE';   Cluster='Compute'; DSCluster='DEV_POD_CLUSTER'; Site='COMPUTE' }
   )
 
   $OU = @{
@@ -1111,12 +1190,17 @@ function Build-DeployConfig {
     'US|DEV|HAW'  = 'OU=Application Servers,OU=Development,OU=Servers & Exceptions,OU=Hawthorne,OU=Accounts Computer,DC=bfl,DC=local';
     'US|PROD|HAW' = 'OU=Application Servers,OU=Servers & Exceptions,OU=Hawthorne,OU=Accounts Computer,DC=bfl,DC=local';
     'US|DEV|MAR'  = 'OU=Application Servers,OU=Development,OU=Servers & Exceptions,OU=Marlborough,OU=Accounts Computer,DC=bfl,DC=local';
-    'US|PROD|MAR' = 'OU=Application Servers,OU=Servers & Exceptions,OU=Marlborough,OU=Accounts Computer,DC=bfl,DC=local'
+    'US|PROD|MAR' = 'OU=Application Servers,OU=Servers & Exceptions,OU=Marlborough,OU=Accounts Computer,DC=bfl,DC=local';
+    'US|DEV|COMPUTE'  = 'OU=Application Servers,OU=Development,OU=Servers & Exceptions,OU=Marlborough,OU=Accounts Computer,DC=bfl,DC=local';
+    'US|PROD|COMPUTE' = 'OU=Application Servers,OU=Servers & Exceptions,OU=Marlborough,OU=Accounts Computer,DC=bfl,DC=local'
   }
 
   $ADServerMap = @{
-    'UK'='UKPRDC011.bfl.local'; 'IE'='IEPRDC010.bfl.local';
-    'US|HAW'='USPRDC036.bfl.local'; 'US|MAR'='USPRDC036.bfl.local'
+    'UK'          = 'UKPRDC011.bfl.local';
+    'IE'          = 'IEPRDC010.bfl.local';
+    'US|HAW'      = 'USPRDC036.bfl.local';
+    'US|MAR'      = 'USPRDC036.bfl.local';
+    'US|COMPUTE'  = 'USPRDC036.bfl.local'
   }
 
   $TemplateItemMap = [ordered]@{
@@ -1165,6 +1249,10 @@ function Build-DeployConfig {
 
   $osChoices = @('Windows 2022','Windows 2019','Linux CentOS 7','Linux RHEL 7','Linux RHEL 9','Linux SLES 15')
   $tmplChoice = AskChoice -Prompt 'Choose OS / Template' -Choices $osChoices -DefaultIndex 0
+
+  # NEW — determine if OS is Windows
+  $osIsWindows = $tmplChoice -like 'Windows*'
+
   $templateItem = $TemplateItemMap[$tmplChoice][$region]
   $customSpec = $SpecMap[$tmplChoice][$region]
 
@@ -1192,6 +1280,12 @@ function Build-DeployConfig {
 
   $changeNum = Ask -Prompt 'Change Number (goes into VM Notes)' -AllowEmpty
 
+  # NEW — build LocalAdmin groups (global + per-VM)
+  $localAdminGroups = @(
+    'BFL\Server Admins',
+    ("BFL\{0}-LocalAdmins" -f $vmName)
+  )
+
   $vmw = [ordered]@{
     VCSA=$vcsa; Cluster=$cluster; VMHost=$null; VMFolder=$vmFolder; TemplatesFolderName=$templatesFolder;
     Network=$network; Datastore=''; DatastoreCluster=$dsCluster;
@@ -1199,13 +1293,35 @@ function Build-DeployConfig {
     VMName=$vmName; CustomizationSpec=$customSpec;
     Hardware=[ordered]@{ CPU=$cpu; MemoryGB=$memGB; DiskGB=$diskGB; AdditionalDisks=$additionalDisks; Sockets=$sockets; CoresPerSocket=$coresPerSocket }
   }
+
   $out = [ordered]@{
-    VMware=$vmw
-    Options=[ordered]@{ PowerOn=$true; EnsureNICConnected=$true; RemoveExtraCDROMs=$true; ToolsWaitSeconds=60; PostPowerOnDelay=15 }
-    AD=[ordered]@{ TargetOU=$adOU; Server=$adServer; UseVCenterCreds=$true; WaitForSeconds=180 }
-    PostDeploy=[ordered]@{ EnableTags=$true; EnableInstallers=$false; LocalAdminGroups=@(); IvantiGroup=$null; PowerPlan=$null }
+    VMware  = $vmw
+    Options = [ordered]@{
+      PowerOn           = $true
+      EnsureNICConnected= $true
+      RemoveExtraCDROMs = $true
+      ToolsWaitSeconds  = 60
+      PostPowerOnDelay  = 15
+    }
+    PostDeploy = [ordered]@{
+      EnableTags        = $true
+      EnableInstallers  = $osIsWindows          # Only install on Windows
+      LocalAdminGroups  = $localAdminGroups     # Default domain admin groups
+      PowerPlan         = 'High performance'
+    }
+
   }
-  if (-not $adOU) { $out.Remove('AD') }
+
+  # Only include AD block if this is a Windows OS choice
+  if ($osIsWindows) {
+    $out.AD = [ordered]@{
+      TargetOU        = $adOU
+      Server          = $adServer
+      UseVCenterCreds = $true
+      WaitForSeconds  = 60
+    }
+  }
+
   if ($changeNum) { $out.ChangeRequestNumber = $changeNum }
 
   $scriptDir = if ($PSScriptRoot) { $PSScriptRoot } elseif ($MyInvocation.MyCommand.Path) { Split-Path -Parent $MyInvocation.MyCommand.Path } else { (Get-Location).Path }
@@ -1214,161 +1330,110 @@ function Build-DeployConfig {
   Write-Host "Saved configuration → $outPath" -ForegroundColor Green
   return $outPath
 }
+function Ensure-LocalAdminADGroup {
+  [CmdletBinding()]
+  param(
+    [Parameter(Mandatory)][string]$ComputerName,
+    [Parameter()][pscredential]$Credential,
+    # UPDATED default OU for all local admin groups
+    [Parameter()][string]$GroupOU = "OU=Local Admin Access,OU=Shared Groups,DC=bfl,DC=local"
+  )
 
-# --- Deploy ---------------------------------------------------------------
-function Deploy-FromCLv2 {
-  param([Parameter(Mandatory=$true)][string]$ConfigPath)
-
-  $deployLog = Join-Path $env:TEMP ("VMDeploy-{0:yyyyMMdd-HHmmss}-{1}.log" -f (Get-Date),(Split-Path -LeafBase $ConfigPath))
-  try { Start-Transcript -Path $deployLog -Append -ErrorAction SilentlyContinue | Out-Null } catch {}
-  Write-Stamp ("Logging to: {0}" -f $deployLog)
-
-  $oldEap = $ErrorActionPreference; $ErrorActionPreference = 'Stop'
   try {
-    $rawConfig = Read-Config -Path $ConfigPath
-    $config = Convert-StructuredConfig -In $rawConfig
-    foreach ($key in @('VCSA','Cluster','Network','ContentLibraryName','TemplateName','Folder','TemplatesFolderName','VMName')) {
-      if (-not $config.$key) { throw "Missing required config field: '$key'." }
+    Import-Module ActiveDirectory -ErrorAction Stop
+  } catch {
+    Write-Warning "[AD] ActiveDirectory module not available; cannot create local admin group."
+    return $null
+  }
+
+  $groupName = "$ComputerName-LocalAdmins"
+  $sam       = $groupName
+
+  try {
+    $getParams = @{
+      Filter      = "SamAccountName -eq '$sam'"
+      ErrorAction = 'Stop'
     }
-    if (-not $config.LocalTemplateName) { $config.LocalTemplateName = ('{0}_US' -f $config.TemplateName) }
+    if ($Credential) { $getParams['Credential'] = $Credential }
 
-    try { VMware.VimAutomation.Core\Set-PowerCLIConfiguration -InvalidCertificateAction Ignore -Confirm:$false | Out-Null } catch {}
-    Write-Host ("Enter credentials for {0} (e.g. administrator@vsphere.local)" -f $config.VCSA)
-    $cred = Get-Credential
-    $vcConn = Invoke-Step -Name ("VMware.VimAutomation.Core\Connect-VIServer {0}" -f $config.VCSA) -Script {VMware.VimAutomation.Core\Connect-VIServer -Server $config.VCSA -Credential $cred -ErrorAction Stop}
-
-    $clusterObj = VMware.VimAutomation.Core\Get-Cluster -Name $config.Cluster -ErrorAction Stop
-    $dc = Get-DatacenterForCluster -Cluster $clusterObj
-    $templatesFolder= Ensure-TemplatesFolderStrict -Datacenter $dc -FolderName $config.TemplatesFolderName
-
-    $template = Ensure-LocalTemplateFromCL -Config $config
-
-    if (VMware.VimAutomation.Core\Get-VM -Name $config.VMName -ErrorAction SilentlyContinue){ throw ("A VM named '{0}' already exists." -f $config.VMName) }
-    $newVM = New-VMFromLocalTemplate -Config $config
-
-    if ($config.CustomizationSpec) {
-      $oscSpec=VMware.VimAutomation.Core\Get-OSCustomizationSpec -Name $config.CustomizationSpec -ErrorAction SilentlyContinue
-      if ($oscSpec) { VMware.VimAutomation.Core\Set-VM -VM $newVM -OSCustomizationSpec $oscSpec -Confirm:$false -ErrorAction SilentlyContinue | Out-Null }
-      else { Write-Warning ("OS Customization Spec '{0}' not found; continuing without it." -f $config.CustomizationSpec) }
+    $existing = Get-ADGroup @getParams -ErrorAction SilentlyContinue
+    if ($existing) {
+      Write-Stamp ("[AD] Local admin group '{0}' already exists." -f $existing.SamAccountName)
+      return $existing
     }
+  } catch {
+    # ignore lookup failure; we’ll try to create
+  }
 
-    if ($config.CPU -or $config.MemoryGB -or $config.CoresPerSocket){
-      $setParams=@{ VM=$newVM; Confirm=$false; ErrorAction='SilentlyContinue' }
-      if($config.CPU){$setParams['NumCPU']=[int]$config.CPU}
-      if($config.MemoryGB){$setParams['MemoryGB']=[int]$config.MemoryGB}
-      if($config.CoresPerSocket){$setParams['CoresPerSocket']=[int]$config.CoresPerSocket}
-      VMware.VimAutomation.Core\Set-VM @setParams | Out-Null
+  try {
+    $newParams = @{
+      Name          = $groupName
+      SamAccountName= $sam
+      GroupScope    = 'Global'
+      GroupCategory = 'Security'
+      Path          = $GroupOU
+      ErrorAction   = 'Stop'
     }
-    if ($config.DiskGB){
-      $sysDisk=VMware.VimAutomation.Core\Get-HardDisk -VM $newVM | Select-Object -First 1
-      if($sysDisk -and $config.DiskGB -gt $sysDisk.CapacityGB){
-        VMware.VimAutomation.Core\Set-HardDisk -HardDisk $sysDisk -CapacityGB $config.DiskGB -Confirm:$false -ErrorAction SilentlyContinue | Out-Null
-      }
-    }
+    if ($Credential) { $newParams['Credential'] = $Credential }
 
-    if ($config.AdditionalDisks -and $config.AdditionalDisks.Count -gt 0) {
-      Add-DataDisks-RoundRobin -VM $newVM -SizesGB (@($config.AdditionalDisks | ForEach-Object {[int]$_})) -Controllers (1,2,3)
-    }
+    $new = New-ADGroup @newParams
+    Write-Stamp ("[AD] Created local admin group '{0}' in '{1}'." -f $new.SamAccountName, $GroupOU)
+    return $new
+  } catch {
+    Write-Warning ("[AD] Failed to create local admin group '{0}': {1}" -f $sam,$_.Exception.Message)
+    return $null
+  }
+}
 
-    if ($config.ChangeRequestNumber){
-      $note = ("CR: {0} — deployed {1}" -f $config.ChangeRequestNumber, (Get-Date -Format 'yyyy-MM-dd HH:mm:ss'))
-      try { VMware.VimAutomation.Core\Set-VM -VM $newVM -Notes $note -Confirm:$false | Out-Null; Write-Stamp ("Notes set: {0}" -f $note) } catch { Write-Warning ("Failed to set Notes: {0}" -f $_.Exception.Message) }
-    }
 
-    if ($config.PowerOn){
-      Invoke-Step -Name "Power on VM" -Script { VMware.VimAutomation.Core\Start-VM -VM $newVM -Confirm:$false | Out-Null }
-      if ($config.PostPowerOnDelay -gt 0) { Write-Stamp ("Sleeping {0}s post power-on…" -f $config.PostPowerOnDelay); Start-Sleep -Seconds ([int]$config.PostPowerOnDelay) }
-      $tw = 60
-      if ($config.ToolsWaitSeconds) { $tw = [int]$config.ToolsWaitSeconds }
-      try { $null = Invoke-Step -Name ("Wait for VMware Tools healthy ({0}s)" -f $tw) -Script { Wait-ToolsHealthy -VM $newVM -TimeoutSec $tw } } catch { Write-Warning ("Wait-ToolsHealthy threw: {0}" -f $_.Exception.Message) }
-    }
+function Invoke-PostDeployGuestConfig {
+  [CmdletBinding()]
+  param(
+    [Parameter(Mandatory)][VMware.VimAutomation.ViCore.Types.V1.Inventory.VirtualMachine]$VM,
+    [Parameter()][string[]]$LocalAdminGroups = @(),
+    [Parameter()][string]$PowerPlan,
+    [Parameter()][pscredential]$Credential
+  )
 
-    Invoke-FinalizeVm -VM $newVM -ToolsWaitSeconds ([int]$config.ToolsWaitSeconds)
 
-    try{
-      $vmObj = VMware.VimAutomation.Core\Get-VM -Id $newVM.Id -ErrorAction SilentlyContinue
-      $toolsState = 'unknown'
-      try { $guest = VMware.VimAutomation.Core\Get-VMGuest -VM $newVM -ErrorAction SilentlyContinue; if ($guest) { $toolsState = $guest.ToolsStatus } } catch {}
-      $hwVer = 'Unknown'
-      if ($vmObj -and $vmObj.HardwareVersion) { $hwVer = $vmObj.HardwareVersion }
-      Write-Stamp ("Final status → Tools: {0}; HW: {1}; Power: {2}" -f $toolsState, $hwVer, $vmObj.PowerState)
+  try {
+    $target = $VM.Name
+
+    # Reuse an existing credential if the caller passed one; otherwise prompt once
+    if (-not $Credential) { $Credential = Get-Credential -Message "[PostDeploy] Creds for $target" }
+
+    # Wait for WinRM if we need to touch local groups or power plans
+    $wsok = $false
+    try {
+      $wsok = Test-WSManWithRetry -ComputerName $target `
+                            -TimeoutSeconds 600 `
+                            -IntervalSeconds 20 `
+                            -FlushDnsOnRetry
+
     } catch {}
-
-    # Tags first
-    if ($config.PSObject.Properties['PostDeploy'] -and $config.PostDeploy.EnableTags) {
-      try {
-        Invoke-ApplyCohesityZertoTags -VM $newVM -Server $vcConn -ErrorAction Stop
-      } catch {
-        Write-Warning ("Post-deploy tagging failed: {0}" -f $_.Exception.Message)
-      }
-    } else {
-      Write-Stamp "[Tags] Skipped by config."
-    }
-
-    # Installers second (optional)
-    if ($config.PSObject.Properties['PostDeploy'] -and $config.PostDeploy.EnableInstallers) {
-      try {
-        Install-CS-And-SCOM-IfNeeded -VM $newVM
-      } catch {
-        Write-Warning ("[Installers] Failed: {0}" -f $_.Exception.Message)
-      }
-    }
-
-    # Guest config third (optional knobs)
-    if ($config.PSObject.Properties['PostDeploy']) {
-      try {
-        $ladm  = @()
-        if ($config.PostDeploy.PSObject.Properties['LocalAdminGroups']) { $ladm = @($config.PostDeploy.LocalAdminGroups) }
-        $ivgrp = $null
-        if ($config.PostDeploy.PSObject.Properties['IvantiGroup']) { $ivgrp = $config.PostDeploy.IvantiGroup }
-        $pplan = $null
-        if ($config.PostDeploy.PSObject.Properties['PowerPlan']) { $pplan = $config.PostDeploy.PowerPlan }
-
-        if ($ladm.Count -or $ivgrp -or $pplan) {
-          Invoke-PostDeployGuestConfig -VM $newVM `
-            -LocalAdminGroups $ladm `
-            -IvantiGroup $ivgrp `
-            -PowerPlan $pplan
-        } else {
-          Write-Stamp "[PostDeploy] No guest config requested."
-        }
-      } catch {
-        Write-Warning ("[PostDeploy] Guest config failed: {0}" -f $_.Exception.Message)
-      }
+    if (-not $wsok) {
+      Write-Stamp ("[PostDeploy] {0}: WinRM unreachable after retries, skipping guest config." -f $target)
+      # NOTE: Ivanti / AD bits from the management host can still run if you keep them outside
+      $LocalAdminGroups = @()
+      $PowerPlan        = $null
     }
 
 
-    function Invoke-PostDeployGuestConfig {
-    [CmdletBinding()]
-    param(
-      [Parameter(Mandatory)][VMware.VimAutomation.ViCore.Types.V1.Inventory.VirtualMachine]$VM,
-      [Parameter()][string[]]$LocalAdminGroups = @(),
-      [Parameter()][string]$IvantiGroup,
-      [Parameter()][string]$PowerPlan,
-      [Parameter()][pscredential]$Credential
-    )
+    $sess = $null
+    if ($LocalAdminGroups.Count -or $PowerPlan) {
+      $sess = New-PSSession -ComputerName $target -Credential $Credential
+    }
 
     try {
-      $target = $VM.Name
-
-      # Reuse an existing credential if the caller passed one; otherwise prompt once
-      if (-not $Credential) { $Credential = Get-Credential -Message "[PostDeploy] Creds for $target" }
-
-      $wsok = $false
-      try { $wsok = [bool](Test-WSMan -ComputerName $target -ErrorAction SilentlyContinue) } catch {}
-      if (-not $wsok) { Write-Stamp ("[PostDeploy] {0}: WSMan unreachable, skipping." -f $target); return }
-
-      $sess = New-PSSession -ComputerName $target -Credential $Credential
-      try {
-        # 1) Add domain groups to local Administrators
-        if ($LocalAdminGroups -and $LocalAdminGroups.Count -gt 0) {
-          Invoke-Command -Session $sess -ScriptBlock {
+      # 1) Add domain groups to local Administrators on the guest
+      if ($sess -and $LocalAdminGroups -and $LocalAdminGroups.Count -gt 0) {
+        Invoke-Command -Session $sess -ScriptBlock {
           param([string[]]$groups)
           Import-Module Microsoft.PowerShell.LocalAccounts -ErrorAction SilentlyContinue
           foreach ($g in $groups) {
             try {
               $exists = (Get-LocalGroupMember -Group 'Administrators' -ErrorAction SilentlyContinue |
-                        Where-Object { $_.Name -eq $g })
+                         Where-Object { $_.Name -eq $g })
               if (-not $exists) {
                 Add-LocalGroupMember -Group 'Administrators' -Member $g -ErrorAction Stop
                 Write-Output "[LocalAdmins] Added $g"
@@ -1380,67 +1445,458 @@ function Deploy-FromCLv2 {
             }
           }
         } -ArgumentList @($LocalAdminGroups)
-
-        }
-
-        # 2) Set power plan (maps friendly names to standard GUIDs)
-        if ($PowerPlan) {
-          $plan = $PowerPlan.Trim().ToLowerInvariant()
-          $guid = switch ($plan) {
-            'high performance' { '8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c' }
-            'balanced'         { '381b4222-f694-41f0-9685-ff5bb260df2e' }
-            'power saver'      { 'a1841308-3541-4fab-bc81-f71556f20b4a' }
-            default            { $null }
-          }
-          if ($guid) {
-            Invoke-Command -Session $sess -ScriptBlock {
-              param($g) powercfg -setactive $g
-            } -ArgumentList $guid
-            Write-Stamp ("[PowerPlan] Set to '{0}'" -f $PowerPlan)
-          } else {
-            Write-Warning ("[PowerPlan] Unknown plan '{0}' (expected: Balanced | High performance | Power saver)" -f $PowerPlan)
-          }
-        }
-
-        # 3) Add the computer to an AD group for Ivanti (if provided)
-        if ($IvantiGroup) {
-          try {
-            Invoke-Command -Session $sess -ScriptBlock { whoami } | Out-Null  # keep session warm
-            Import-Module ActiveDirectory -ErrorAction Stop
-            $comp = Get-ADComputer -Identity $target -ErrorAction Stop
-            Add-ADGroupMember -Identity $IvantiGroup -Members $comp -ErrorAction Stop
-            Write-Stamp ("[Ivanti] Computer '{0}' added to group '{1}'." -f $target,$IvantiGroup)
-          } catch {
-            Write-Warning ("[Ivanti] Failed to add '{0}' to '{1}': {2}" -f $target,$IvantiGroup,$_.Exception.Message)
-          }
-        }
-
-      } finally {
-        if ($sess) { Remove-PSSession $sess }
       }
-    } catch {
-      Write-Warning ("[PostDeploy] {0}: {1}" -f $VM.Name,$_.Exception.Message)
+
+      # 2) Set power plan
+      if ($sess -and $PowerPlan) {
+        $plan = $PowerPlan.Trim().ToLowerInvariant()
+        $guid = switch ($plan) {
+          'high performance' { '8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c' }
+          'balanced'         { '381b4222-f694-41f0-9685-ff5bb260df2e' }
+          'power saver'      { 'a1841308-3541-4fab-bc81-f71556f20b4a' }
+          default            { $null }
+        }
+        if ($guid) {
+          Invoke-Command -Session $sess -ScriptBlock {
+            param($g) powercfg -setactive $g
+          } -ArgumentList $guid
+          Write-Stamp ("[PowerPlan] Set to '{0}'" -f $PowerPlan)
+        } else {
+          Write-Warning ("[PowerPlan] Unknown plan '{0}' (expected: Balanced | High performance | Power saver)" -f $PowerPlan)
+        }
+      }
+
+    } finally {
+      if ($sess) { Remove-PSSession $sess }
+    }
+
+  } catch {
+    Write-Warning ("[PostDeploy] {0}: {1}" -f $VM.Name,$_.Exception.Message)
+  }
+}
+
+function Set-IvantiPatchGroupForServer {
+  [CmdletBinding()]
+  param(
+    [Parameter(Mandatory)][string]$ComputerName
+  )
+
+  try {
+    Import-Module ActiveDirectory -ErrorAction Stop
+  } catch {
+    Write-Warning "[Ivanti] ActiveDirectory module not available; skipping Ivanti patch group assignment."
+    return
+  }
+
+  function Get-RoleFromName {
+    param([string]$Name)
+    if ($Name -match '(?i)\bDB\b' -or $Name -match '(?i)DB') { return 'DB' }
+    elseif ($Name -match '(?i)\bAP\b' -or $Name -match '(?i)AP') { return 'AP' }
+    else { return 'Other' }
+  }
+
+  function Get-RegionEnvFromName {
+    param([string]$Name)
+    $u = $Name.ToUpper()
+    if ($u -match '^UKPR' -or $u -match '^IEPR') { return @{ Region='EMEA'; Env='Prod' } }
+    if ($u -match '^UKDV' -or $u -match '^IEDV') { return @{ Region='EMEA'; Env='NonProd' } }
+    if ($u -match '^USPR') { return @{ Region='US'; Env='Prod' } }
+    if ($u -match '^USDV') { return @{ Region='US'; Env='NonProd' } }
+    return $null
+  }
+
+  function Get-TargetGroup {
+    param([hashtable]$Meta, [string]$Role)
+
+    switch ($Meta.Region) {
+      'EMEA' {
+        switch ($Role) {
+          'DB'    { return 'app.WindowsUpdate.EMEA.SQLServers' }
+          'AP'    { if ($Meta.Env -eq 'Prod') { return 'app.WindowsUpdate.EMEA.ProdServers.4' } else { return 'app.WindowsUpdate.EMEA.NonProdServers.2' } }
+          default { if ($Meta.Env -eq 'Prod') { return 'app.WindowsUpdate.EMEA.ProdServers.1' } else { return 'app.WindowsUpdate.EMEA.NonProdServers.1' } }
+        }
+      }
+      'US' {
+        switch ($Role) {
+          'DB'    { return 'app.WindowsUpdate.US.SQLServers' }
+          'AP'    { if ($Meta.Env -eq 'Prod') { return 'app.WindowsUpdate.US.ProdServers.4' } else { return 'app.WindowsUpdate.US.NonProdServers.2' } }
+          default { if ($Meta.Env -eq 'Prod') { return 'app.WindowsUpdate.US.ProdServers.1' } else { return 'app.WindowsUpdate.US.NonProdServers.1' } }
+        }
+      }
     }
   }
 
+  $SchedulingSets = @{
+    'EMEA' = @(
+      'app.WindowsUpdate.EMEA.SQLServers',
+      'app.WindowsUpdate.EMEA.ProdServers.1',
+      'app.WindowsUpdate.EMEA.ProdServers.2',
+      'app.WindowsUpdate.EMEA.ProdServers.3',
+      'app.WindowsUpdate.EMEA.ProdServers.4',
+      'app.WindowsUpdate.EMEA.ProdServers.5',
+      'app.WindowsUpdate.EMEA.ProdServers.6',
+      'app.WindowsUpdate.EMEA.NonProdServers.1',
+      'app.WindowsUpdate.EMEA.NonProdServers.2'
+    )
+    'US' = @(
+      'app.WindowsUpdate.US.SQLServers',
+      'app.WindowsUpdate.US.ProdServers.1',
+      'app.WindowsUpdate.US.ProdServers.2',
+      'app.WindowsUpdate.US.ProdServers.3',
+      'app.WindowsUpdate.US.ProdServers.4',
+      'app.WindowsUpdate.US.ProdServers.5',
+      'app.WindowsUpdate.US.ProdServers.6',
+      'app.WindowsUpdate.US.NonProdServers.1',
+      'app.WindowsUpdate.US.NonProdServers.2'
+    )
+  }
 
-    # AD LAST — run if any AD field exists
-    if ($null -ne $config.ADTargetOU -or $null -ne $config.ADServer -or $true -eq $config.ADUseVCenterCreds -or $config.ADCredFile) {
+  $meta = Get-RegionEnvFromName -Name $ComputerName
+  if (-not $meta) {
+    Write-Stamp ("[Ivanti] {0}: name did not match region/env rules; skipping." -f $ComputerName)
+    return
+  }
+
+  $role   = Get-RoleFromName -Name $ComputerName
+  $target = Get-TargetGroup -Meta $meta -Role $role
+  if (-not $target) {
+    Write-Stamp ("[Ivanti] {0}: target group could not be determined; skipping." -f $ComputerName)
+    return
+  }
+
+  $schedSet = $SchedulingSets[$meta.Region]
+  if (-not $schedSet) {
+    Write-Stamp ("[Ivanti] {0}: no scheduling set for region {1}; skipping." -f $ComputerName,$meta.Region)
+    return
+  }
+
+  $computer = $null
+  try {
+    $computer = Get-ADComputer -Identity $ComputerName -ErrorAction Stop
+  } catch {
+    Write-Warning ("[Ivanti] {0}: AD computer not found; skipping. ({1})" -f $ComputerName,$_.Exception.Message)
+    return
+  }
+
+  $currentGroups = @()
+  try {
+    $currentGroups = Get-ADPrincipalGroupMembership -Identity $computer -ErrorAction SilentlyContinue |
+                     Select-Object -ExpandProperty Name
+  } catch {}
+
+  $inScope = $currentGroups | Where-Object { $schedSet -contains $_ }
+
+  foreach ($g in $inScope) {
+    if ($g -ne $target) {
+      try {
+        Remove-ADGroupMember -Identity $g -Members $computer -Confirm:$false -ErrorAction SilentlyContinue
+        Write-Stamp ("[Ivanti] {0}: removed from '{1}'." -f $ComputerName,$g)
+      } catch {
+        Write-Warning ("[Ivanti] {0}: failed to remove from '{1}' - {2}" -f $ComputerName,$g,$_.Exception.Message)
+      }
+    }
+  }
+
+  if (-not ($inScope -contains $target)) {
+    try {
+      Add-ADGroupMember -Identity $target -Members $computer -ErrorAction Stop
+      Write-Stamp ("[Ivanti] {0}: added to '{1}'." -f $ComputerName,$target)
+    } catch {
+      Write-Warning ("[Ivanti] {0}: failed to add to '{1}' - {2}" -f $ComputerName,$target,$_.Exception.Message)
+    }
+  } else {
+    Write-Stamp ("[Ivanti] {0}: already in correct Ivanti group '{1}'." -f $ComputerName,$target)
+  }
+}
+
+# --- Deploy ---------------------------------------------------------------
+function Deploy-FromCLv2 {
+  param([Parameter(Mandatory = $true)][string]$ConfigPath)
+
+  # --- Helper: ensure per-VM Local Admin AD group exists ----------------------
+  function Ensure-LocalAdminGroupForVM {
+    [CmdletBinding()]
+    param(
+      [Parameter(Mandatory)][string]$ComputerName,
+      [string]$ADServer,
+      [pscredential]$Credential
+    )
+
+    try {
+      Import-Module ActiveDirectory -ErrorAction Stop
+    } catch {
+      Write-Warning ("[ADGroup] ActiveDirectory module not available: {0}" -f $_.Exception.Message)
+      return
+    }
+
+    $groupOu   = "OU=Local Admin Access,OU=Shared Groups,DC=bfl,DC=local"
+    $groupName = "{0}-LocalAdmins" -f $ComputerName
+
+    $getParams = @{
+      Filter     = "SamAccountName -eq '$groupName'"
+      ErrorAction = 'Stop'
+    }
+    if ($ADServer)    { $getParams['Server']     = $ADServer }
+    if ($Credential)  { $getParams['Credential'] = $Credential }
+
+    try {
+      $existing = Get-ADGroup @getParams
+    } catch {
+      $existing = $null
+    }
+
+    if ($existing) {
+      Write-Stamp ("[ADGroup] {0} already exists in AD." -f $groupName)
+      return
+    }
+
+    $newParams = @{
+      Name          = $groupName
+      SamAccountName= $groupName
+      GroupCategory = 'Security'
+      GroupScope    = 'Global'
+      Path          = $groupOu
+      ErrorAction   = 'Stop'
+    }
+    if ($ADServer)   { $newParams['Server']     = $ADServer }
+    if ($Credential) { $newParams['Credential'] = $Credential }
+
+    try {
+      New-ADGroup @newParams | Out-Null
+      Write-Stamp ("[ADGroup] Created AD group '{0}' in '{1}'." -f $groupName, $groupOu)
+    } catch {
+      Write-Warning ("[ADGroup] Failed to create '{0}': {1}" -f $groupName, $_.Exception.Message)
+    }
+  }
+
+  # --- Logging -----------------------------------------------------------------
+  $deployLog = Join-Path $env:TEMP ("VMDeploy-{0:yyyyMMdd-HHmmss}-{1}.log" -f (Get-Date), (Split-Path -LeafBase $ConfigPath))
+  try { Start-Transcript -Path $deployLog -Append -ErrorAction SilentlyContinue | Out-Null } catch {}
+  Write-Stamp ("Logging to: {0}" -f $deployLog)
+
+  $oldEap = $ErrorActionPreference
+  $ErrorActionPreference = 'Stop'
+  try {
+    # --- Load + normalise config ----------------------------------------------
+    $rawConfig = Read-Config -Path $ConfigPath
+    $config    = Convert-StructuredConfig -In $rawConfig
+
+    foreach ($key in @('VCSA','Cluster','Network','ContentLibraryName','TemplateName','Folder','TemplatesFolderName','VMName')) {
+      if (-not $config.$key) { throw "Missing required config field: '$key'." }
+    }
+    if (-not $config.LocalTemplateName) {
+      $config.LocalTemplateName = ('{0}_US' -f $config.TemplateName)
+    }
+
+    # --- Connect to vCenter ----------------------------------------------------
+    try {
+      VMware.VimAutomation.Core\Set-PowerCLIConfiguration -InvalidCertificateAction Ignore -Confirm:$false | Out-Null
+    } catch {}
+
+    Write-Host ("Enter credentials for {0} (e.g. administrator@vsphere.local)" -f $config.VCSA)
+    $cred  = Get-Credential
+
+    $vcConn = Invoke-Step -Name ("VMware.VimAutomation.Core\Connect-VIServer {0}" -f $config.VCSA) -Script {
+      VMware.VimAutomation.Core\Connect-VIServer -Server $config.VCSA -Credential $cred -ErrorAction Stop
+    }
+
+    # --- Resolve Datacenter / Templates folder --------------------------------
+    $clusterObj      = VMware.VimAutomation.Core\Get-Cluster -Name $config.Cluster -ErrorAction Stop
+    $dc              = Get-DatacenterForCluster -Cluster $clusterObj
+    $templatesFolder = Ensure-TemplatesFolderStrict -Datacenter $dc -FolderName $config.TemplatesFolderName
+
+    # --- Ensure local template from Content Library ---------------------------
+    $template = Ensure-LocalTemplateFromCL -Config $config
+
+    # --- Clone VM -------------------------------------------------------------
+    if (VMware.VimAutomation.Core\Get-VM -Name $config.VMName -ErrorAction SilentlyContinue) {
+      throw ("A VM named '{0}' already exists." -f $config.VMName)
+    }
+    $newVM = New-VMFromLocalTemplate -Config $config
+
+    # --- Customisation spec ---------------------------------------------------
+    if ($config.CustomizationSpec) {
+      $oscSpec = VMware.VimAutomation.Core\Get-OSCustomizationSpec -Name $config.CustomizationSpec -ErrorAction SilentlyContinue
+      if ($oscSpec) {
+        VMware.VimAutomation.Core\Set-VM -VM $newVM -OSCustomizationSpec $oscSpec -Confirm:$false -ErrorAction SilentlyContinue | Out-Null
+      } else {
+        Write-Warning ("OS Customization Spec '{0}' not found; continuing without it." -f $config.CustomizationSpec)
+      }
+    }
+
+    # --- Hardware & disks -----------------------------------------------------
+    if ($config.CPU -or $config.MemoryGB -or $config.CoresPerSocket) {
+      $setParams = @{ VM=$newVM; Confirm=$false; ErrorAction='SilentlyContinue' }
+      if ($config.CPU)           { $setParams['NumCPU']        = [int]$config.CPU }
+      if ($config.MemoryGB)      { $setParams['MemoryGB']      = [int]$config.MemoryGB }
+      if ($config.CoresPerSocket){ $setParams['CoresPerSocket']= [int]$config.CoresPerSocket }
+      VMware.VimAutomation.Core\Set-VM @setParams | Out-Null
+    }
+
+    if ($config.DiskGB) {
+      $sysDisk = VMware.VimAutomation.Core\Get-HardDisk -VM $newVM | Select-Object -First 1
+      if ($sysDisk -and $config.DiskGB -gt $sysDisk.CapacityGB) {
+        VMware.VimAutomation.Core\Set-HardDisk -HardDisk $sysDisk -CapacityGB $config.DiskGB -Confirm:$false -ErrorAction SilentlyContinue | Out-Null
+      }
+    }
+
+    if ($config.AdditionalDisks -and $config.AdditionalDisks.Count -gt 0) {
+      Add-DataDisks-RoundRobin -VM $newVM -SizesGB (@($config.AdditionalDisks | ForEach-Object { [int]$_ })) -Controllers (1,2,3)
+    }
+
+    # --- Notes ----------------------------------------------------------------
+    if ($config.ChangeRequestNumber) {
+      $note = ("CR: {0} — deployed {1}" -f $config.ChangeRequestNumber, (Get-Date -Format 'yyyy-MM-dd HH:mm:ss'))
+      try {
+        VMware.VimAutomation.Core\Set-VM -VM $newVM -Notes $note -Confirm:$false | Out-Null
+        Write-Stamp ("Notes set: {0}" -f $note)
+      } catch {
+        Write-Warning ("Failed to set Notes: {0}" -f $_.Exception.Message)
+      }
+    }
+
+    # --- Power on & initial tools wait ---------------------------------------
+    if ($config.PowerOn) {
+      Invoke-Step -Name "Power on VM" -Script {
+        VMware.VimAutomation.Core\Start-VM -VM $newVM -Confirm:$false | Out-Null
+      }
+
+      if ($config.PostPowerOnDelay -gt 0) {
+        Write-Stamp ("Sleeping {0}s post power-on…" -f $config.PostPowerOnDelay)
+        Start-Sleep -Seconds ([int]$config.PostPowerOnDelay)
+      }
+
+      $tw = 60
+      if ($config.ToolsWaitSeconds) { $tw = [int]$config.ToolsWaitSeconds }
+      try {
+        $null = Invoke-Step -Name ("Wait for VMware Tools healthy ({0}s)" -f $tw) -Script {
+          Wait-ToolsHealthy -VM $newVM -TimeoutSec $tw
+        }
+      } catch {
+        Write-Warning ("Wait-ToolsHealthy threw: {0}" -f $_.Exception.Message)
+      }
+    }
+
+    # --- Finalise VM (Tools policy, reboot, HW upgrade, revalidate tools) -----
+    Invoke-FinalizeVm -VM $newVM -ToolsWaitSeconds ([int]$config.ToolsWaitSeconds)
+
+    try {
+      $vmObj = VMware.VimAutomation.Core\Get-VM -Id $newVM.Id -ErrorAction SilentlyContinue
+      $toolsState = 'unknown'
+      try {
+        $guest = VMware.VimAutomation.Core\Get-VMGuest -VM $newVM -ErrorAction SilentlyContinue
+        if ($guest) { $toolsState = $guest.ToolsStatus }
+      } catch {}
+      $hwVer = 'Unknown'
+      if ($vmObj -and $vmObj.HardwareVersion) { $hwVer = $vmObj.HardwareVersion }
+      Write-Stamp ("Final status → Tools: {0}; HW: {1}; Power: {2}" -f $toolsState, $hwVer, $vmObj.PowerState)
+    } catch {}
+
+    # ====================== POST-DEPLOY ORDER ================================
+    # 1) TAGS
+    # 2) AD PLACEMENT + AD LOCAL-ADMIN GROUP
+    # 3) INSTALLERS (CrowdStrike / SCOM)
+    # 4) POST CONFIG (local admin groups, power plan, Ivanti)
+    # ========================================================================
+
+    # --- 1) Tags first -------------------------------------------------------
+    if ($config.PSObject.Properties['PostDeploy'] -and $config.PostDeploy.EnableTags) {
+      try {
+        Invoke-ApplyCohesityZertoTags -VM $newVM -Server $vcConn -ErrorAction Stop
+      } catch {
+        Write-Warning ("Post-deploy tagging failed: {0}" -f $_.Exception.Message)
+      }
+    } else {
+      Write-Stamp "[Tags] Skipped by config."
+    }
+
+    # --- 2) AD (join/move) + AD LocalAdmins group ----------------------------
+    $hasADConfig =
+      ($null -ne $config.ADTargetOU)     -or
+      ($null -ne $config.ADServer)       -or
+      ($true  -eq $config.ADUseVCenterCreds) -or
+      ($config.ADCredFile)
+
+        if ($hasADConfig) {
       Write-Stamp "[AD] Starting AD join/move…"
       try {
         Invoke-ADPlacement -VM $newVM `
-                                -TargetOU $config.ADTargetOU `
-                                -ADServer $config.ADServer `
-                                -UseVCenterCreds:($config.ADUseVCenterCreds) `
-                                -ADCredFile $config.ADCredFile `
-                                -WaitForSeconds ([int]$config.ADWaitForSeconds) `
-                                -DomainCredential $cred     # <-- reuse the vCenter creds you just entered
-
+                           -TargetOU         $config.ADTargetOU `
+                           -ADServer         $config.ADServer `
+                           -UseVCenterCreds:($config.ADUseVCenterCreds) `
+                           -ADCredFile       $config.ADCredFile `
+                           -WaitForSeconds   ([int]$config.ADWaitForSeconds) `
+                           -DomainCredential $cred
       } catch {
         Write-Warning ("[AD] Placement step failed: {0}" -f $_.Exception.Message)
       }
+
+      # Ensure the per-VM AD LocalAdmins group exists
+      try {
+        Ensure-LocalAdminGroupForVM -ComputerName $config.VMName `
+                                    -ADServer    $config.ADServer `
+                                    -Credential  $cred
+      } catch {
+        Write-Warning ("[ADGroup] Failed to ensure LocalAdmins group: {0}" -f $_.Exception.Message)
+      }
+
+      # Ensure Ivanti patching group membership (exclusive scheduling set)
+      try {
+        Set-IvantiPatchGroupForServer -ComputerName $config.VMName
+      } catch {
+        Write-Warning ("[Ivanti] Failed to set patch group for '{0}': {1}" -f $config.VMName,$_.Exception.Message)
+      }
     } else {
       Write-Stamp "[AD] Skipped: no AD settings in config."
+    }
+
+
+    # --- 3) Installers (CrowdStrike + SCOM) ----------------------------------
+    if ($config.PSObject.Properties['PostDeploy'] -and $config.PostDeploy.EnableInstallers) {
+      try {
+        Install-CS-And-SCOM-IfNeeded -VM $newVM -Credential $cred
+      } catch {
+        Write-Warning ("[Installers] Failed: {0}" -f $_.Exception.Message)
+      }
+    } else {
+      Write-Stamp "[Installers] Skipped by config."
+    }
+
+    # --- 4) Guest post-config (LocalAdmins, Ivanti, PowerPlan) --------------
+    if ($config.PSObject.Properties['PostDeploy']) {
+      try {
+        # Start with config-defined groups
+        $ladm = @()
+        if ($config.PostDeploy.PSObject.Properties['LocalAdminGroups']) {
+          $ladm = @($config.PostDeploy.LocalAdminGroups)
+        }
+
+        # Add the per-VM AD group as a local admin: BFL\<VMName>-LocalAdmins
+        if ($config.VMName -and -not [string]::IsNullOrWhiteSpace($config.VMName)) {
+          $vmLocalGroup = "BFL\{0}-LocalAdmins" -f $config.VMName
+          if ($ladm -notcontains $vmLocalGroup) {
+            $ladm += $vmLocalGroup
+          }
+        }
+
+        $pplan = $null
+        if ($config.PostDeploy.PSObject.Properties['PowerPlan']) {
+          $pplan = $config.PostDeploy.PowerPlan
+        }
+
+        if ($ladm.Count -or $pplan) {
+        Invoke-PostDeployGuestConfig -VM $newVM `
+            -LocalAdminGroups $ladm `
+            -PowerPlan        $pplan `
+            -Credential       $cred
+        } else {
+        Write-Stamp "[PostDeploy] No guest config requested."
+        }
+
+
+      } catch {
+        Write-Warning ("[PostDeploy] Guest config failed: {0}" -f $_.Exception.Message)
+      }
     }
 
     Write-Host ("✅ VM '{0}' deployed." -f $config.VMName) -ForegroundColor Green
@@ -1450,6 +1906,7 @@ function Deploy-FromCLv2 {
     $ErrorActionPreference = $oldEap
   }
 }
+
 
 # --- Menu -------------------------------------------------------------------
 $global:LastConfigPath = $null
@@ -1474,7 +1931,10 @@ while ($true) {
     }
     '99' { try { $global:LastConfigPath = Build-DeployConfig; if ($global:LastConfigPath) { Deploy-FromCLv2 -ConfigPath $global:LastConfigPath } } catch { Write-Warning $_ } }
     '50' { try { Remove-VMAndAD } catch { Write-Warning $_ } }
-    '0'  { break }
+
+    '0'  { return }
+
     default { Write-Host 'Unknown option.' -ForegroundColor Yellow }
   }
 }
+

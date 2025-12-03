@@ -1,0 +1,51 @@
+{
+  "VMware": {
+    "VCSA": "usprim004.bfl.local",
+    "Cluster": "Compute",
+    "VMHost": null,
+    "VMFolder": "Production",
+    "TemplatesFolderName": "Templates",
+    "Network": "VLAN_2002_Stretch",
+    "Datastore": "",
+    "DatastoreCluster": "DEV_POD_CLUSTER",
+    "ContentLibrary": {
+      "Library": "Packer templates",
+      "Item": "PKR_windows_server_2022_std_Current",
+      "LocalTemplateName": null,
+      "ForceReplace": true
+    },
+    "VMName": "USPRCM102",
+    "CustomizationSpec": "Win2022_Template",
+    "Hardware": {
+      "CPU": 4,
+      "MemoryGB": 12,
+      "DiskGB": 100,
+      "AdditionalDisks": [],
+      "Sockets": 1,
+      "CoresPerSocket": 4
+    }
+  },
+  "Options": {
+    "PowerOn": true,
+    "EnsureNICConnected": true,
+    "RemoveExtraCDROMs": true,
+    "ToolsWaitSeconds": 60,
+    "PostPowerOnDelay": 15
+  },
+  "PostDeploy": {
+    "EnableTags": true,
+    "EnableInstallers": true,
+    "LocalAdminGroups": [
+      "BFL\\Server Admins",
+      "BFL\\USPRCM102-LocalAdmins"
+    ],
+    "PowerPlan": "High performance"
+  },
+  "AD": {
+    "TargetOU": "OU=Application Servers,OU=Servers & Exceptions,OU=Marlborough,OU=Accounts Computer,DC=bfl,DC=local",
+    "Server": "USPRDC036.bfl.local",
+    "UseVCenterCreds": true,
+    "WaitForSeconds": 60
+  },
+  "ChangeRequestNumber": "CHG0090083 Active Directory to Cisco ISE, and replace it with Agent based EVT software that has been recommended by Cisco TAC."
+}
